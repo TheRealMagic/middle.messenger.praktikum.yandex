@@ -1,0 +1,37 @@
+{
+  "name": "messagerproject",
+  "version": "1.0.0",
+  "license": "ISC",
+  "engine": "14.15.1",
+  "scripts": {
+    "404": "parcel src/pages/404/404.html --open",
+    "500": "parcel src/pages/500/500.html --open",
+    "login": "parcel static/index.html --open",
+    "signup": "parcel src/pages/SignUp/SignUp.html --open",
+    "chats": "parcel src/pages/Chats/Chats.html --open",
+    "profile": "parcel src/pages/Profile/Profile.html --open",
+    "build": "parcel build",
+    "start": "node server.js"
+  },
+  "targets": {
+    "default": {
+      "source": [
+        "static/index.html",
+        "src/pages/SignUp/SignUp.html",
+        "src/pages/404/404.html",
+        "src/pages/500/500.html",
+        "src/pages/Chats/Chats.html",
+        "src/pages/Profile/Profile.html"
+      ]
+    }
+  },
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.1",
+    "parcel": "^2.0.1",
+    "postcss-advanced-variables": "^3.0.1",
+    "postcss-nested": "^5.0.6"
+  }
+}

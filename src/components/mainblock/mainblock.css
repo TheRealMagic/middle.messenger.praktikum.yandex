@@ -1,0 +1,9 @@
+.main-block {
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 6px rgb(0 0 0 / 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}

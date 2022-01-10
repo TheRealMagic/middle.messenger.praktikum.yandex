@@ -1,0 +1,13 @@
+html, body {
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.sign-in-block {
+    width: 340px;
+    min-height: 615px;
+}
