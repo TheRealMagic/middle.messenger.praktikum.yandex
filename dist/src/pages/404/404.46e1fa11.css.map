@@ -1,0 +1,1 @@
+{"mappings":"AAAA,UAIE,kBAAmB,CAHnB,qBAAyB,CACzB,YAAa,CAIb,WAAY,CAHZ,sBAAuB,CAEvB,UAEF","sources":["src/pages/404/404.css"],"sourcesContent":["html, body {\r\n  background-color: #FFFFFF;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  width: 100%;\r\n  height: 100%;\r\n}"],"names":[],"version":3,"file":"404.46e1fa11.css.map"}
