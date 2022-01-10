@@ -1,5 +1,4 @@
-import "../container/container.css";
-import { Templator } from "../Templator";
+import { Templator } from "../Templator.js";
 
 const CONTAINER_TEMPLATE = `<{{ tag }} {{ }} {{ src }} {{ style }} {{ classes }} {{ alt }}>{{ textContent }}</{{ tag }}>`;
 

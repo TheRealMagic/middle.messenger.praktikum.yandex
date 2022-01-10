@@ -1,4 +1,4 @@
-import {getContainerHTML} from "../components/container/container" 
+import {getContainerHTML} from "../components/container/container.js" 
 
 function showInputLabel(e) {
   const labled = !!document.querySelector(`.${e.target.name}-label`);

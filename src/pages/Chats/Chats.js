@@ -1,8 +1,6 @@
-import "./Chats.css";
-
-import { getContainerHTML } from "../../components/container/container";
-import { getInputHTML } from "../../components/inputElement/inputElement";
-import { getLinkHTML } from "../../components/link/link";
+import { getContainerHTML } from "../../components/container/container.js";
+import { getInputHTML } from "../../components/inputElement/inputElement.js";
+import { getLinkHTML } from "../../components/link/link.js";
 
 const LEFT_CONTAINER_CLASS = `left-container`,
   CHAT_CONTAINER_CLASS = `chat-container`,

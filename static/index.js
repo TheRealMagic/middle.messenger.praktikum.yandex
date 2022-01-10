@@ -1,12 +1,10 @@
-import { getMainBlockHTML } from "../src/components/mainblock/mainblock";
-import { getContainerHTML } from "../src/components/container/container";
-import { getFormHTML } from "../src/components/form/form";
-import { getInputHTML } from "../src/components/inputElement/inputElement";
-import { getLinkHTML } from "../src/components/link/link";
+import { getMainBlockHTML } from "/src/components/mainblock/mainblock.js";
+import { getContainerHTML } from "/src/components/container/container.js";
+import { getFormHTML } from "/src/components/form/form.js";
+import { getInputHTML } from "/src/components/inputElement/inputElement.js";
+import { getLinkHTML } from "/src/components/link/link.js";
 
-import { showInputLabel, showWarning } from "../src/utils/InputUtils";
-
-import "../static/styles.css";
+import { showInputLabel, showWarning } from "/src/utils/InputUtils.js";
 
 function addContent() {
   addMainBlock();

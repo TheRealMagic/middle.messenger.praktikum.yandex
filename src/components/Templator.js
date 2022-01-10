@@ -1,4 +1,4 @@
-import get from "../utils/get";
+import get from "../utils/get.js";
 
 const TEMPLATE_REGEXP = /\{\{(.*?)\}\}/gi;
 

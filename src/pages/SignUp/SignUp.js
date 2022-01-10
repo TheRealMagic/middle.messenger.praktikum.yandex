@@ -1,12 +1,10 @@
-import "./SignUp.css";
+import { getMainBlockHTML } from "../../components/mainblock/mainblock.js";
+import { getContainerHTML } from "../../components/container/container.js";
+import { getFormHTML } from "../../components/form/form.js";
+import { getInputHTML } from "../../components/inputElement/inputElement.js";
+import { getLinkHTML } from "../../components/link/link.js";
 
-import { getMainBlockHTML } from "../../components/mainblock/mainblock";
-import { getContainerHTML } from "../../components/container/container";
-import { getFormHTML } from "../../components/form/form";
-import { getInputHTML } from "../../components/inputElement/inputElement";
-import { getLinkHTML } from "../../components/link/link";
-
-import { showInputLabel, showWarning } from "../../utils/InputUtils";
+import { showInputLabel, showWarning } from "../../utils/InputUtils.js";
 
 const BLOCK_CLASS = "sign-in-block",
   FORM_CLASS = "sign-in-form",
@@ -149,7 +147,7 @@ function addSignInLink() {
   const context = {
     textContent: "Войти",
     classes: "base-link sign-link action-container__sign-in-link",
-    path: "../../../static/index.html"
+    path: "/index.html"
   };
   const loginForm = getUniqueElement(`.${ACTION_CONTAINER_CLASS}`),
     registerInput = getLinkHTML(context);

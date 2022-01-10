@@ -1,5 +1,4 @@
-import "../mainblock/mainblock.css";
-import { Templator } from "../Templator";
+import { Templator } from "../Templator.js";
 
 const MAIN_BLOCK_TEMPLATE = `<{{ tag }} {{ id }} {{ classes }} {{ style }}>{{ textContent }}</{{ tag }}>`;
 

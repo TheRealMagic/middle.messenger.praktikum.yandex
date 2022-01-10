@@ -1,7 +1,5 @@
-import "./500.css";
-
-import { getContainerHTML } from "../../components/container/container";
-import { getLinkHTML } from "../../components/link/link";
+import { getContainerHTML } from "../../components/container/container.js";
+import { getLinkHTML } from "../../components/link/link.js";
 
 const ERROR_NUMBER = "500",
   ERROR_TEXT = "Мы уже фиксим",

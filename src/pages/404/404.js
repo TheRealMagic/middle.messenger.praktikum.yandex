@@ -1,7 +1,5 @@
-import "./404.css";
-
-import { getContainerHTML } from "../../components/container/container";
-import { getLinkHTML } from "../../components/link/link";
+import { getContainerHTML } from "../../components/container/container.js";
+import { getLinkHTML } from "../../components/link/link.js";
 
 const ERROR_NUMBER = "404",
   ERROR_TEXT = "Не туда попали",
