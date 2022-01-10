@@ -1,12 +1,10 @@
-import "./Profile.css";
+import { getContainerHTML } from "../../components/container/container.js";
+import { getFormHTML } from "../../components/form/form.js";
+import { getInputHTML } from "../../components/inputElement/inputElement.js";
 
-import { getContainerHTML } from "../../components/container/container";
-import { getFormHTML } from "../../components/form/form";
-import { getInputHTML } from "../../components/inputElement/inputElement";
-
-import { formItemConfig as getPreviewFormConfig, actionsConfig as getPreviewActionConfig } from "./forms/preview";
-import { formItemConfig as getCahngeDataFormConfig, actionsConfig as getCahngeDataActionConfig } from "./forms/changedata";
-import { formItemConfig as getChangePassFormConfig, actionsConfig as getChangePassActionConfig } from "./forms/changepassword";
+import { formItemConfig as getPreviewFormConfig, actionsConfig as getPreviewActionConfig } from "./forms/preview.js";
+import { formItemConfig as getCahngeDataFormConfig, actionsConfig as getCahngeDataActionConfig } from "./forms/changedata.js";
+import { formItemConfig as getChangePassFormConfig, actionsConfig as getChangePassActionConfig } from "./forms/changepassword.js";
 
 const PROFILE_CONTAINER_CLASS = `profile-container`,
   BACK_BUTTON_CONTAINER_CLASS = `back-btn-container`,

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "ISC",
   "engine": "14.15.1",
+  "type": "module",
   "scripts": {
     "404": "parcel src/pages/404/404.html --open",
     "500": "parcel src/pages/500/500.html --open",
@@ -26,7 +27,8 @@
     }
   },
   "dependencies": {
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "http": "0.0.1-security"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.1",

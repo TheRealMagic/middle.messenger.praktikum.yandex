@@ -1,6 +1,5 @@
-import { Templator } from "../Templator";
-import {getContainerHTML} from "../container/container"
-import "../inputElement/inputElement.css";
+import { Templator } from "../Templator.js";
+import {getContainerHTML} from "../container/container.js";
 
 const INPUT_TEMPLATE = `<input {{ name }} {{ type }} {{ placeholder }} {{ classes }} {{ style }} {{ value }} {{ onclick }} {{ disabled }}>{{ textContent }}</input>`;
 

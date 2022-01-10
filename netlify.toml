@@ -22,3 +22,4 @@
   from = "/*"
   to = "/src/pages/500/500.html"
   status = 500
+

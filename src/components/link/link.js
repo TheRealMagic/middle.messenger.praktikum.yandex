@@ -1,5 +1,4 @@
-import "../link/link.css";
-import { Templator } from "../Templator";
+import { Templator } from "../Templator.js";
 
 const LABEL_TEMPLATE = `<a {{ classes }} {{ style }} {{ path }}>{{textContent}}</a>`;
 

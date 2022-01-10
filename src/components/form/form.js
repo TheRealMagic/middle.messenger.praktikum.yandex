@@ -1,5 +1,4 @@
-import "../form/form.css"
-import { Templator } from "../Templator";
+import { Templator } from "../Templator.js";
 
 const FORM_TEMPLATE = `<form {{ id }} {{ name }} {{ action }} {{ method }} {{ classes }} {{ style }}>{{ textContent }}</form>`;
 

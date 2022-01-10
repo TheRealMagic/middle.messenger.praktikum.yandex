@@ -1,5 +1,3 @@
-$default-blue: #3369F3;
-
 .base-input {
     border: none;
     width: 100%;
@@ -12,7 +10,7 @@ $default-blue: #3369F3;
 }
 
 .sign-text-input {
-    border-bottom: 1px solid $default-blue;
+    border-bottom: 1px solid #3369F3;
 }
 
 .base-input-button {
@@ -25,7 +23,7 @@ $default-blue: #3369F3;
 }
 
 .sign-btn {
-    background-color: $default-blue;
+    background-color: #3369F3;
     color: white;
 }
 
