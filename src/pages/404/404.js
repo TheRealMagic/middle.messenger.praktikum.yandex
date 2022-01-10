@@ -50,7 +50,7 @@ function addBackLink() {
   const context = {
     textContent: LINK_TEXT,
     classes: "base-link sign-link error-link",
-    path: "../"
+    path: "../Chats/Chats.html"
   };
   const block = document.querySelector(`.${MAIN_CONTAINER_CLASS}`),
     link = getLinkHTML(context);
