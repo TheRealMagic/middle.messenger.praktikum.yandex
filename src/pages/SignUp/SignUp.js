@@ -147,7 +147,7 @@ function addSignInLink() {
   const context = {
     textContent: "Войти",
     classes: "base-link sign-link action-container__sign-in-link",
-    path: "/index.html"
+    path: "/static/index.html"
   };
   const loginForm = getUniqueElement(`.${ACTION_CONTAINER_CLASS}`),
     registerInput = getLinkHTML(context);
