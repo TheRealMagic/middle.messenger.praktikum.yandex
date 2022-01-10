@@ -26,7 +26,8 @@
     }
   },
   "dependencies": {
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "http": "0.0.1-security"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.1",
