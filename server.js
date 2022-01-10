@@ -1,8 +1,11 @@
-import express from "express";
+/* import express from "express";
 import { dirname, join } from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url'; 
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url));*/
+
+const express = require("express");
+const {join} = require("path");
 
 const app = express();
 const PORT = 3000;
