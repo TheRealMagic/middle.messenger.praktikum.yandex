@@ -11,7 +11,7 @@
     "chats": "parcel src/pages/Chats/Chats.html --open",
     "profile": "parcel src/pages/Profile/Profile.html --open",
     "build": "parcel build",
-    "start": "node server.js"
+    "start": "PORT=3000 node server.js"
   },
   "targets": {
     "default": {

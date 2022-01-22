@@ -28,10 +28,10 @@ class Templator {
   _compileTemplate(ctx) {
     let tmpl = this._template,
       key = null;
-
+    const valueIndex = 1;
     while ((key = TEMPLATE_REGEXP.exec(tmpl))) {
-      if (key[1]) {
-        const tmplValue = key[1].trim();
+      if (key[valueIndex]) {
+        const tmplValue = key[valueIndex].trim();
         const data = get(ctx, tmplValue);
         if (data) {
           const propName = key[0].replace(/[{,}, ]/gi, "");
@@ -60,4 +60,4 @@ class Templator {
   }
 }
 
-export { Templator };
+export class Templator {};
