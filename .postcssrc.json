@@ -1,0 +1,9 @@
+{
+  "parser": "sugarss",
+  "map": false,
+  "plugins": {
+    "autoprefixer": {},
+    "postcss-nested": {},
+    "postcss-advanced-variables": {}
+  }
+}

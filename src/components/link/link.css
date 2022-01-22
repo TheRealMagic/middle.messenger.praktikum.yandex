@@ -1,0 +1,20 @@
+.base-link {
+    text-decoration: none;
+    color: #3369F3;
+}
+
+.base-link:visited {
+    text-decoration: none;
+    color: #3369F3;
+}
+
+.sign-link {
+    margin: 10px 0 30px;
+}
+
+.error-link {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}

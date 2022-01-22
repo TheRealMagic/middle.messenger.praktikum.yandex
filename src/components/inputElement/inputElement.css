@@ -1,0 +1,39 @@
+.base-input {
+    border: none;
+    width: 100%;
+    outline: none;
+}
+
+.base-input-text {
+    font-size: 14px;
+    width: auto;
+}
+
+.sign-text-input {
+    border-bottom: 1px solid #3369F3;
+}
+
+.base-input-button {
+    border-radius: 8px;
+    height: 37px;
+}
+
+.sign-btn:hover {
+    background-color: rgb(197, 190, 127);
+}
+
+.sign-btn {
+    background-color: #3369F3;
+    color: white;
+}
+
+.profile-input-label {
+    float: left;
+    height: 100%;
+}
+
+.profile-text-input {
+    float: right;
+    text-align: right;
+    background-color: white;
+}
