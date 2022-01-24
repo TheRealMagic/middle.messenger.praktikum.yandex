@@ -1,4 +1,4 @@
-export default function isEmpty(value) {
+export default function isEmpty(value: any): boolean {
     const type = typeof value;
     switch (type) {
         case "string":

@@ -14,6 +14,10 @@ app.use(express.static(join(__dirname, "static")));
 app.use("/static", express.static(join(__dirname, "static")));
 app.use("/src", express.static(join(__dirname, "src")));
 
+/*app.use(express.static(join(__dirname, "dist/static")));
+app.use("/static", express.static(join(__dirname, "dist/static")));
+app.use("/src", express.static(join(__dirname, "dist/src")));*/
+
 
 app.listen(PORT, (request, response) => {
     console.log(`Server started at ${PORT}`);

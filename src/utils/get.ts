@@ -1,8 +1,7 @@
+export default function get(obj: object, path: string, defaultValue: any): any {
+    const keys: string[] = path.split('.');
 
-export default function get(obj, path, defaultValue) {
-    const keys = path.split('.');
-
-    let result = obj;
+    let result: any = obj;
     for (let key of keys) {
         result = result[key];
 
