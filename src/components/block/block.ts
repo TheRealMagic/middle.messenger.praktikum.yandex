@@ -1,7 +1,7 @@
-import {Meta, blockProperty, ExtendedTextInputConfig} from "./types";
+import {blockProperty, Meta} from "./types";
 import EventBus from "../../utils/EventBus";
-import Templator from "../../utils/Templator/Templator";
-import {TemplatorConfig} from "../../utils/Templator/TemplatorTypes";
+import {Templator} from "../../utils/Templator/Templator";
+import "./styles.scss";
 
 export class Block {
   static EVENTS = {
@@ -15,9 +15,11 @@ export class Block {
   
   protected _meta: Meta;
   
-  protected props: blockProperty;
+  public props: blockProperty;
   
   eventBus: Function;
+  
+  protected template: string | undefined= "";
   
   /** JSDoc
    * @param {string} tagName
@@ -25,12 +27,14 @@ export class Block {
    *
    * @returns {void}
    */
-  constructor(tagName: string = "div", props: blockProperty = {}, extendedConfig: ExtendedTextInputConfig = {}) {
+  constructor(tagName: string = "div", props?: blockProperty, template?: string) {
     const eventBus: EventBus = new EventBus();
+    
+    this.template = template;
+    
     this._meta = {
       tagName,
-      props,
-      extendedConfig
+      props
     };
     
     this.props = this._makePropsProxy(props);
@@ -49,6 +53,7 @@ export class Block {
   }
   
   private init(): void {
+    this._createResources();
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
   
@@ -56,23 +61,33 @@ export class Block {
     this.componentDidMount();
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
+  _createResources() {
+    const { tagName } = this._meta;
+    this._element = this._createDocumentElement(tagName);
+  }
+  
+  _createDocumentElement(tagName: string) {
+    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
+    return document.createElement(tagName);
+  }
   
   // Может переопределять пользователь, необязательно трогать
-  componentDidMount() {}
+  componentDidMount() {
+  }
   
   dispatchComponentDidMount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
   
   // Может переопределять пользователь, необязательно трогать
-  componentDidUpdate(): boolean {
-    return true;
+  componentDidUpdate(oldValue?: string | boolean, newValue?:  string | boolean): boolean {
+    return oldValue !== newValue;
   }
   
-  private _componentDidUpdate(/*oldProps: blockProperty, newProps: blockProperty*/): void {
-    const response = this.componentDidUpdate(/*oldProps, newProps*/);
+  private _componentDidUpdate(oldValue?:  string | boolean, newValue?:  string | boolean): void {
+    const response = this.componentDidUpdate(oldValue,  newValue);
     if (response) {
-      this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
+      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
   
@@ -80,7 +95,6 @@ export class Block {
     if (!nextProps) {
       return;
     }
-    
     Object.assign(this.props, nextProps);
   };
   
@@ -89,35 +103,31 @@ export class Block {
   }
   
   _render(): void {
-    // Этот небезопасный метод для упрощения логики
-    // Используйте шаблонизатор из npm или напишите свой безопасный
-    // Нужно не в строку компилировать (или делать это правильно),
-    // либо сразу в DOM-элементы возвращать из compile DOM-ноду
-    const newElement: HTMLElement = this.render();
-    if (this._element) {
-      this._element.replaceWith(newElement);
-      this._element = newElement;
-    } else {
-      this._element = newElement;
-    }
+    const newElement: HTMLElement= this.render();
+    this.removeListeners();
+    const tempEl = this._element;
+    this._element = newElement;
+    tempEl.replaceWith(newElement);
+    this.addListeners();
   }
   
   // Может переопределять пользователь, необязательно трогать
-  render(config?: TemplatorConfig): HTMLElement {
-    const templator: Templator = new Templator(this._meta.tagName);
-    return templator.configureElement(config || this.props);
+  render(): HTMLElement {
+    const templator: Templator = new Templator(this.template || "");
+    return templator.compile(this.props);
   }
   
   getContent() {
     return this.element;
   }
   
-  private _makePropsProxy(props: blockProperty):blockProperty  {
+  private _makePropsProxy(props?: blockProperty): blockProperty {
     const self: Block = this;
-    return new Proxy(props, {
+    return new Proxy(props || {}, {
       get(target: Meta, property: string, receiver) {
         return Reflect.get(target, property, receiver);
       },
+      // eslint-disable-next-line max-params
       set(target: blockProperty, property: string, value, receiver) {
         if (target[property] !== value) {
           const oldValue = target[property];
@@ -126,10 +136,39 @@ export class Block {
         }
         return true;
       },
-      deleteProperty(/*target: blockProperty, property: string*/) {
+      deleteProperty() {
         throw new Error("нет доступа");
       }
     });
+  }
+  
+  addListeners(): void {
+    const listeners: Record<string, () => void> = this.props.listeners;
+    if (!listeners || !this.element) {
+      return;
+    }
+    Object.entries(listeners).forEach(([eventName, handler]) => {
+      this.element.addEventListener(eventName, handler, {once: eventName === "blur"});
+    });
+  }
+  
+  removeListeners(): void {
+    const listeners: Record<string, () => void> = this.props.listeners;
+    if (!listeners || !this.element) {
+      return;
+    }
+    Object.entries(listeners).forEach(([eventName, handler]) => {
+      this.element.removeEventListener(eventName, handler);
+    });
+  }
+  
+  toggleClasses(insertClasses: string[], removeClasses: string[]): blockProperty{
+    const cls: Set<string> = new Set(this.props.classes);
+    if (cls.size) {
+      removeClasses.forEach((remove: string) => cls.delete(remove));
+      insertClasses.forEach((insert: string) => cls.add(insert));
+    }
+    return Array.from(cls);
   }
   
   show() {

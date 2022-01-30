@@ -1,0 +1,17 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "color-hex-case": "lower",
+    "unit-no-unknown": true,
+    "keyframe-declaration-no-important": true,
+    "unit-allowed-list": ["px", "em", "%", "s"]
+  },
+  "ignoreFiles": [
+    "dist/*",
+    "node_modules/*",
+    ".vscode/*",
+    "tproj/*",
+    "parcel-cache/*",
+    ".github/*"
+  ]
+}

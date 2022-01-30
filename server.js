@@ -8,17 +8,21 @@ const express = require("express");
 const {join} = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 3000;;
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static(join(__dirname, "static")));
+/*app.use(express.static(join(__dirname, "static")));
 app.use("/static", express.static(join(__dirname, "static")));
-app.use("/src", express.static(join(__dirname, "src")));
+app.use("/src", express.static(join(__dirname, "src")));*/
 
 /*app.use(express.static(join(__dirname, "dist/static")));
 app.use("/static", express.static(join(__dirname, "dist/static")));
 app.use("/src", express.static(join(__dirname, "dist/src")));*/
 
+app.use(express.static(join(__dirname, "static")));
+app.use("/static", express.static(join(__dirname, "tscrpt/static")));
+app.use("/src", express.static(join(__dirname, "tscrpt/src")));
 
-app.listen(PORT, (request, response) => {
+
+app.listen(PORT, () => {
     console.log(`Server started at ${PORT}`);
 });

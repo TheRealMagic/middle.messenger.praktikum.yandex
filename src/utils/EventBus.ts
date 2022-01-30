@@ -2,7 +2,7 @@ type Listener = Record<string, Function[]>
 
 export default class EventBus {
   
-  listeners: Listener
+  listeners: Listener;
   
   constructor() {
     this.listeners = {};
@@ -31,7 +31,7 @@ export default class EventBus {
       throw new Error(`Нет события: ${event}`);
     }
     
-    this.listeners[event].forEach(function(listener) {
+    this.listeners[event].forEach((listener) => {
       listener(...args);
     });
   }

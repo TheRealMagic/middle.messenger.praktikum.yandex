@@ -2,11 +2,11 @@ import {Block} from "../../components/block/block";
 import {hiddenAdd, render} from "../../utils/render";
 import {TextInput} from "../../components/Input/Input";
 
-const LEFT_CONTAINER_CLASS = `left-container`,
-  CHAT_CONTAINER_CLASS = `chat-container`,
-  PROFILE_LINK_CLASS = `profile-link`,
-  SEARCH_FIELD_CLASS = `search`,
-  CHAT_LIST_CONTAINER_CLASS = `chat-list-container`;
+const LEFT_CONTAINER_CLASS = "left-container",
+  CHAT_CONTAINER_CLASS = "chat-container",
+  PROFILE_LINK_CLASS = "profile-link",
+  SEARCH_FIELD_CLASS = "search",
+  CHAT_LIST_CONTAINER_CLASS = "chat-list-container";
 
 function addContent() {
   addLeftContainer();
@@ -16,7 +16,7 @@ function addContent() {
 
 const leftContainer: Block = new Block("div", {
   classes: [LEFT_CONTAINER_CLASS]
-})
+});
 
 function addLeftContainer(): void {
   addLeftContainerContent();
@@ -30,7 +30,7 @@ function addLeftContainerContent(): void {
 
 function addProfileLink(): void {
   const profileLink = new Block("a",{
-    textContent: "Профиль " + '\u276f',
+    textContent: "Профиль " + "\u276f",
     href: "../Profile/Profile.html",
     classes: [`${LEFT_CONTAINER_CLASS}__${PROFILE_LINK_CLASS}`]
   });

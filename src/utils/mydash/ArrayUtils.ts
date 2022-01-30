@@ -14,6 +14,7 @@ export function rangeRight(start: number, end: number, step: number): any {
     return range(start, end, step, true);
 }
 
+// eslint-disable-next-line max-params
 export function range(start: number, end: number, step: number, isRight: boolean) {
     if (start !== undefined && end === undefined ) {
         end = start;

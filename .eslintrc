@@ -1,0 +1,24 @@
+{
+  "extends": "eslint:recommended",
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "rules": {
+    "max-len": [2, 150],
+    "indent": ["error", 2],
+    "max-params": [2, 3],
+    "@typescript-eslint/no-unused-vars": 2,
+    "quotes": ["error", "double"],
+    "linebreak-style": ["error", "windows"],
+    "semi": ["error", "always"],
+    "prefer-arrow-callback": ["error", {
+      "allowNamedFunctions": false,
+      "allowUnboundThis": true
+    }],
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    "camelcase": "warn"
+  }
+}

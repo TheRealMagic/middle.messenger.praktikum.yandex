@@ -11,3 +11,8 @@ html, body {
     width: 340px;
     min-height: 450px;
 }
+
+.sign-in-block {
+    width: 340px;
+    min-height: 615px;
+}

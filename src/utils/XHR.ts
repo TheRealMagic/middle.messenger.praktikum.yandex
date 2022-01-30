@@ -29,15 +29,15 @@ class HTTPTransport {
   
   put = (url: string, options: XHROptions = {}) => {
     return this.request(url, {...options, method: METHODS.PUT}, options.timeout);
-  }
+  };
   
   post = (url: string, options: XHROptions = {}) => {
     return this.request(url, {...options, method: METHODS.POST}, options.timeout);
-  }
+  };
   
   delete = (url: string, options: XHROptions = {}) => {
     return this.request(url, {...options, method: METHODS.DELETE}, options.timeout);
-  }
+  };
   
   request = (url: string, options: XHROptions, timeout:number = 5000) => {
     return new Promise((resolve, reject) => {
@@ -71,7 +71,7 @@ class HTTPTransport {
         handleError();
       }, timeout);
     });
-  }
+  };
 }
 
 function queryStringify(data: object): string {
@@ -79,9 +79,10 @@ function queryStringify(data: object): string {
     return "";
   }
   // Можно делать трансформацию GET-параметров в отдельной функции
-  return `?` + Object.entries(data).map(([key, value]) => `${key}=${value}`).join("&");
+  return "?" + Object.entries(data).map(([key, value]) => `${key}=${value}`).join("&");
 }
 
+// eslint-disable-next-line no-unused-vars
 function fetchWithRetry(url: string, options: FetchOptions): any {
   if (options && options.retries && options.retries > 1) {
     const req = new HTTPTransport();
@@ -91,6 +92,7 @@ function fetchWithRetry(url: string, options: FetchOptions): any {
       },
       () => {
         options.retries--;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         return fetchWithRetry(url, options);
       }
     );

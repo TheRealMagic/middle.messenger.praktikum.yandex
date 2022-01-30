@@ -11,7 +11,7 @@
     "chats": "parcel src/pages/Chats/Chats.html --open",
     "profile": "parcel src/pages/Profile/Profile.html --open",
     "build": "parcel build",
-    "start": "set PORT=3000&& node server.js"
+    "start": "tsc && set PORT=3000&& node server.js"
   },
   "targets": {
     "default": {
@@ -30,10 +30,17 @@
     "http": "0.0.1-security"
   },
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "autoprefixer": "^10.4.1",
-    "parcel": "^2.0.1",
+    "eslint": "^8.7.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "nanoid": "^3.2.0",
+    "parcel": "^2.2.1",
     "postcss-advanced-variables": "^3.0.1",
     "postcss-nested": "^5.0.6",
+    "stylelint": "^14.3.0",
     "typescript": "^4.5.5"
   }
 }

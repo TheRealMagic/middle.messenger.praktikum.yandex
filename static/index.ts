@@ -1,6 +1,18 @@
+// @ts-ignore
+import LoginPage from "../src/pages/login";
+import {render} from "../src/utils/render";
+
+const loginPage = new LoginPage();
+
+render("body", loginPage);
+
+
+/*
 import {Block} from "../src/components/block/block";
 import {hiddenAdd, render} from "../src/utils/render";
 import {TextInput} from "../src/components/Input/Input";
+
+import "./styles.css";
 
 const LOGIN_BLOCK_CLASS = "login-block";
 const LOGIN_FORM_CLASS = "login-form";
@@ -29,7 +41,7 @@ function addFormItems() {
 
 function addLabel(): void {
   const label: Block = new Block("div", {
-    textContent: `Вход`,
+    textContent: "Вход",
     classes: [
       "form-header"
     ]
@@ -173,3 +185,4 @@ function addRegisterLink() {
 }
 
 addContent();
+*/

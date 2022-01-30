@@ -5,20 +5,22 @@ import {
   actionsConfig as getCahngeDataActionConfig,
   formItemConfig as getCahngeDataFormConfig
 } from "./forms/changedata";
+
 import {
   actionsConfig as getChangePassActionConfig,
   formItemConfig as getChangePassFormConfig
 } from "./forms/changepassword";
+
 import {actionsConfig as getPreviewActionConfig, formItemConfig as getPreviewFormConfig} from "./forms/preview";
 import {inputProperty} from "../../components/Input/types";
 import {TextInput} from "../../components/Input/Input";
 import {blockProperty, ExtendedTextInputConfig} from "../../components/block/types";
 
-const PROFILE_CONTAINER_CLASS = `profile-container`,
-  BACK_BUTTON_CONTAINER_CLASS = `back-btn-container`,
-  BACK_BUTTON_CLASS = `back-btn`,
-  FORM_CLASS = `profile-form`,
-  CONTENT_WRAPPER_CONTAINER_CLASS = `content-wrapper`,
+const PROFILE_CONTAINER_CLASS = "profile-container",
+  BACK_BUTTON_CONTAINER_CLASS = "back-btn-container",
+  BACK_BUTTON_CLASS = "back-btn",
+  FORM_CLASS = "profile-form",
+  CONTENT_WRAPPER_CONTAINER_CLASS = "content-wrapper",
   ACTION_CONTAINER_CLASS = `${FORM_CLASS}__action-container`;
 
 /*const modes: string[] = [
@@ -52,7 +54,7 @@ function addBackButtonContainer(): void {
 function addBackButton(backButtonContainer: Block): void {
   const backButton: Block = new Block("div", {
     classes: [`${BACK_BUTTON_CONTAINER_CLASS}__${BACK_BUTTON_CLASS}`],
-    textContent: '\u276e',
+    textContent: "\u276e",
     listeners: {
       click: onBackButtonClick
     }
@@ -62,7 +64,7 @@ function addBackButton(backButtonContainer: Block): void {
 
 function onBackButtonClick(): void {
   let dummy: any = document.createElement("a");
-  dummy.href = "../Chats/Chats.html"
+  dummy.href = "../Chats/Chats.html";
   dummy.click();
 }
 
@@ -75,7 +77,7 @@ const contentWrapper: Block = new Block("main", {
 });
 
 function addContentWrapper() {
-  hiddenAdd(profileContainer, contentWrapper)
+  hiddenAdd(profileContainer, contentWrapper);
 }
 
 function addAvatarWrapper() {
@@ -121,7 +123,7 @@ function addForm(): void {
 }
 
 let getFormItemsConfig: Function = EmptyFn,
-  getActionsConfig: Function = EmptyFn
+  getActionsConfig: Function = EmptyFn;
 
 function changeModeHandlers(): void {
   if (mode === "changeData") {
@@ -157,7 +159,7 @@ function getInputContainerConfig(): {[key: string]: string[] } {
       "input-container",
       "profile-input-container"
     ]
-  }
+  };
 }
 
 function addActionContainer(form: Block): void {
@@ -186,7 +188,6 @@ const CHANGE_DATA_BTN_CLASS: string = `action-container__change-data-btn`,
   EXIST_BTN_CLASS: string = `action-container__exit-btn`;
 
 function addActionBtnsListeners() {
-  debugger
   const btnsSelector: string = `.profile-action-container .base-input-button`,
     btns: NodeList = document.querySelectorAll(btnsSelector);
   if (btns && btns.length) {

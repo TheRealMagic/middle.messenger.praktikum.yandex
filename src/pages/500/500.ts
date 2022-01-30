@@ -3,9 +3,8 @@ import {Block} from "../../components/block/block";
 
 const ERROR_NUMBER = "500",
   ERROR_TEXT = "Мы уже фиксим",
-  LINK_TEXT = "Назад к чатам";
-
-const MAIN_CONTAINER_CLASS = "main-container";
+  LINK_TEXT = "Назад к чатам",
+ MAIN_CONTAINER_CLASS = "main-container";
 
 const mainBlock: Block = new Block("main", {
   classes: [
