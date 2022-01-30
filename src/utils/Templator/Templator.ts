@@ -55,7 +55,9 @@ export class Templator {
                   tmplValue = tmpls.pop();
                   continue;
                 }
-                replacedText = printableProps[tmplValue] ? `${printableProps[tmplValue]}='${data}'` : data;
+                if (data !== "false") {
+                  replacedText = printableProps[tmplValue] ? `${printableProps[tmplValue]}='${data}'` : data;
+                }
               } else {
                 if (tmplValue === "classes") {
                   this.classes = data;

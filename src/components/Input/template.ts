@@ -1,3 +1,3 @@
-const template = "<input {{ name type placeholder value classes }}>123</input>";
+const template = "<input {{ name type placeholder value classes disabled }}></input>";
 
 export default template;

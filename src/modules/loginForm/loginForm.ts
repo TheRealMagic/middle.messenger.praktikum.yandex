@@ -12,6 +12,10 @@ export class LoginForm extends Form {
       type: "text",
       placeholder: "Логин",
       classes: getDefaultTextInputClasses(),
+      containerClasses: getDefaultInputContainerClasses(),
+      labelClasses: [
+        "base-label"
+      ],
       listeners: {
         focus: (e: Event): void => {
           nameInput.setProps({value: (e.target as HTMLInputElement).value, focused: true});
@@ -28,6 +32,10 @@ export class LoginForm extends Form {
       type: "password",
       placeholder: "Пароль",
       classes: getDefaultTextInputClasses(),
+      containerClasses: getDefaultInputContainerClasses(),
+      labelClasses: [
+        "base-label"
+      ],
       listeners: {
         focus: (e: Event): void => {
           passInput.setProps({value: (e.target as HTMLInputElement).value, focused: true});
@@ -45,4 +53,8 @@ export class LoginForm extends Form {
     super({classes: ["base-form", "sign-form", "login-form"], actionContainer, passInput, nameInput,
       listeners: props.listeners}, template);
   }
+}
+
+function getDefaultInputContainerClasses(): string[] {
+  return ["sign-input-container"];
 }

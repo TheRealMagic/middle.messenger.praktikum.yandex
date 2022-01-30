@@ -81,7 +81,7 @@ export class Block {
   
   // Может переопределять пользователь, необязательно трогать
   componentDidUpdate(oldValue?: string | boolean, newValue?:  string | boolean): boolean {
-    return oldValue !== newValue;
+    return true;// oldValue !== newValue;
   }
   
   private _componentDidUpdate(oldValue?:  string | boolean, newValue?:  string | boolean): void {

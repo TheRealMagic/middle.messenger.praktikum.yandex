@@ -14,16 +14,21 @@ export class ContaineredInput extends Block {
   
   validationLabel: Label;
   
+  alwaysShowlabel: boolean;
+  
   constructor(props: blockProperty) {
-    const fieldNameLabel = new Label({classes: ["base-label"], textContent: props.placeholder || "Поле"});
-    fieldNameLabel.hide();
+    const fieldNameLabel = new Label({classes: props.labelClasses || [], textContent: props.placeholder || "Поле"});
+    if (!props.alwaysShowlabel) {
+      fieldNameLabel.hide();
+    }
     const inputField = new Input(props);
     const validationLabel = new Label({classes: ["base-label", "warning-label"], textContent: ""});
     validationLabel.hide();
     
-    super("div", {classes: ["input-container", "sign-input-container"], fieldNameLabel, inputField, validationLabel}
+    super("div", {classes: ["input-container", ...(props.containerClasses || [])], fieldNameLabel, inputField, validationLabel}
       , template);
-    
+  
+    this.alwaysShowlabel = props.alwaysShowlabel;
     this.fieldNameLabel = fieldNameLabel;
     this.inputField = inputField;
     this.validationLabel = validationLabel;
@@ -44,7 +49,7 @@ export class ContaineredInput extends Block {
   }
   
   checkHideLabel() {
-    if (this.props.focused) {
+    if (!this.alwaysShowlabel && this.props.focused) {
       this.props.value ? this.fieldNameLabel.show() : this.fieldNameLabel.hide();
     }
   }

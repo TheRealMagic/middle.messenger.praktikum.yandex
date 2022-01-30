@@ -31,6 +31,10 @@ function getSignUpFormField(name: string, type: string, placeholder: string): Co
     type: type,
     placeholder: placeholder,
     classes: getDefaultTextInputClasses(),
+    containerClasses: getDefaultInputContainerClasses(),
+    labelClasses: [
+      "base-label"
+    ],
     listeners: {
       focus: (e: Event): void => {
         instanse.setProps({value: (e.target as HTMLInputElement).value, focused: true});
@@ -44,4 +48,8 @@ function getSignUpFormField(name: string, type: string, placeholder: string): Co
   };
   instanse = new ContaineredInput(props);
   return instanse;
+}
+
+function getDefaultInputContainerClasses(): string[] {
+  return ["sign-input-container"];
 }

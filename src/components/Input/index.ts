@@ -1,3 +1,3 @@
 import {Input} from "./input";
 
-export {Input as default};
+export {Input};

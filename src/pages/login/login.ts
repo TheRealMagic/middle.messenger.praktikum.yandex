@@ -8,6 +8,8 @@ import {SignUpForm} from "../../modules/signUpForm/signUpForm";
 import {Templator} from "../../utils/Templator/Templator";
 import {authLinkTemplate} from "./template";
 import {Input} from "../../components/Input/input";
+import {ChatsPage} from "../chats/chats";
+import {render} from "../../utils/render";
 
 export default class LoginPage extends Block {
   
@@ -108,12 +110,14 @@ export default class LoginPage extends Block {
   }
   
   onLoginSubmit(e: Event): void{
+    e.preventDefault();
     const form: HTMLFormElement = e.target as HTMLFormElement;
     console.log(JSON.stringify({login: form.login.value, password: form.password.value}));
-    e.preventDefault();
+    render("body", new ChatsPage());
   }
   
   onSignUpSubmit(e: Event) {
+    e.preventDefault();
     const form: HTMLFormElement = e.target as HTMLFormElement;
     console.log(JSON.stringify({
       email: form.email.value,
@@ -124,7 +128,6 @@ export default class LoginPage extends Block {
       password: form.first_name.value,
       password_confirmation: form.password_confirmation.value
     }));
-    e.preventDefault();
-    e.preventDefault();
+    render("body", new ChatsPage());
   }
 }
