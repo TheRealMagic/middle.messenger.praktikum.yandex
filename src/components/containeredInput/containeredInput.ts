@@ -69,5 +69,4 @@ export class ContaineredInput extends Block {
   get input(): Input {
     return this.inputField;
   }
-  
 }

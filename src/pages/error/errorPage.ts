@@ -30,5 +30,3 @@ export class ServerErrorPage extends ErrorPage {
     super({errorNumber: "500", errorText: "Мы уже фиксим"});
   }
 }
-  
-  
