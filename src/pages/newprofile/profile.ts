@@ -17,7 +17,7 @@ import {blockProperty} from "../../components/block/types";
 import {ContaineredInput} from "../../components/containeredInput/containeredInput";
 import {ProfilePageController, ProfileStates} from "../../controllers/ProfilePageController";
 import {Input} from "../../components/Input/input";
-import LoginPage from "../login";
+import LoginPage from "../login/login";
 
 export class ProfilePage extends Block {
   
@@ -29,7 +29,7 @@ export class ProfilePage extends Block {
   
   private profileFormItems: Record<string, ContaineredInput>;
   
-  private changePassFormItems: Record<string, ContaineredInput>;
+  //private changePassFormItems: Record<string, ContaineredInput>;
   
   private controller: ProfilePageController;
   
@@ -149,13 +149,12 @@ export class ProfilePage extends Block {
   }
   
   onChangePassButtonClick(): void {
-    debugger
     this.controller.setState(ProfileStates.ChangePass);
     if (!this.changePassForm) {
-      const {form, items} = getChangePasswordForm();
+      const {form/*, items*/} = getChangePasswordForm();
       form.setProps({actionsContainer: this.getActionContainer(this.getChangePassActionsContainer())});
       this.changePassForm = form;
-      this.changePassFormItems = items;
+      //this.changePassFormItems = items;
       this.contentWrapper.setProps({changePassForm: this.changePassForm});
     }
     this.profileForm.hide();
