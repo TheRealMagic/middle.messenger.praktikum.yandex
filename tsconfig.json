@@ -1,12 +1,6 @@
 {
   "compilerOptions": {
-    "plugins": [      {
-      "name": "typescript-plugin-css-modules",
-      "options": {
-        "classnameTransform": "dashes",
-        "customMatcher": "\\.m\\.css$",
-      }
-    }],
+    "plugins": [{"name": "typescript-plugin-css-modules"}],
     "module": "es6",
     "target": "es6",
     "noImplicitAny": true,
