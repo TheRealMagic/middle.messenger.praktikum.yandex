@@ -10,7 +10,9 @@ export const profileFormTemplate = "<form {{ classes actionsContainer phone disp
 
 export const changePassFormTemplate = "<form {{ classes actionsContainer newPassConfirmation newPass oldPass }}></form>";
 
-export const actionsContainerTemplate = "<form {{ classes exitButton changePassButton changeDataButton saveDataButton " +
-  "  }}></form>";
+export const actionsContainerTemplate = "<div {{ classes exitButton changePassButton changeDataButton saveDataButton " +
+  "  }}></div>";
+
+export const changeAvatarTemplate = "<div {{ classes changeAvatarButton changeAvatarLink changeAvatarTitle }}></div>";
 
 export const template = "<div {{ classes profileContainer backBtnContainer }}></div>";

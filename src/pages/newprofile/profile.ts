@@ -3,13 +3,15 @@ import {Container} from "../../components/container/container";
 import {
   actionsContainerTemplate,
   avatarWrapperTemplate,
-  backButtonContainerTemplate, changePassFormTemplate,
+  backButtonContainerTemplate,
+  changeAvatarTemplate,
+  changePassFormTemplate,
   contentWrapperTemplate,
   profileContainerTemplate,
   profileFormTemplate,
   template
 } from "./template";
-import {imgTemplate} from "../../components/block/template";
+import {imgTemplate, linkTemplate} from "../../components/block/template";
 import {render} from "../../utils/render";
 import {ChatsPage} from "../chats/chats";
 import {Form} from "../../components/form/form";
@@ -18,6 +20,11 @@ import {ContaineredInput} from "../../components/containeredInput/containeredInp
 import {ProfilePageController, ProfileStates} from "../../controllers/ProfilePageController";
 import {Input} from "../../components/Input/input";
 import LoginPage from "../login/login";
+import {Popup} from "../../modules/popup/popup";
+import {Label} from "../../components/label/label";
+import {ValidatorFactory} from "../../utils/Validators/ValidatorFactory";
+
+import "./style.scss";
 
 export class ProfilePage extends Block {
   
@@ -48,12 +55,61 @@ export class ProfilePage extends Block {
       backButton
     }, backButtonContainerTemplate);
     
-    //#region avatar
+    //region AvatarPopups
+    const changeAvatarTitle: Label = new Label({
+      textContent: "Загрузите файл"
+    });
+    const changeAvatarLink = new Block("a", {
+      textContent: "Выбрать файл на компьютере",
+      classes: ["popup-link"],
+      listeners: {
+        click: (e: Event) => {
+          e.preventDefault();
+        }
+      }
+    }, linkTemplate);
+    const changeAvatarButton = new Input({
+      value: "Изменить аватар",
+      classes: [
+        "popup-button",
+        "base-input-button",
+        "sign-btn"
+      ],
+      listeners: {
+        click: () => {
+        }
+      }
+    });
+    const changeAvaparPopupContainer: Container = new Container({
+      classes: [
+        "main-block",
+        "change-avatar-popup"
+      ],
+      listeners: {
+        click: (e: Event) => {
+          e.cancelBubble = true;
+        }
+      },
+      changeAvatarTitle,
+      changeAvatarLink,
+      changeAvatarButton
+    }, changeAvatarTemplate);
+    //endregion AvatarPopups
+    
+    //region avatar
     const img: Block = new Block("img", {classes: ["avatar"]}, imgTemplate);
-    const newAvatar: Container = new Container({classes: ["new-avatar"], textContent: "Изменить аватар"});
+    const newAvatar: Container = new Container({
+      classes: ["new-avatar"], textContent: "Изменить аватар",
+      listeners: {
+        click: () => {
+          const changeAvatarPopup = new Popup({popupContainer: changeAvaparPopupContainer});
+          changeAvatarPopup.show();
+        }
+      }
+    });
     const avatarWrapper: Container = new Container({classes: ["avatar-wrapper"], img, newAvatar},
       avatarWrapperTemplate);
-    //#endregion avatar
+    //endregion avatar
     
     const nameLabel: Container = new Container({classes: ["name-label"], textContent: "Иван"});
     
@@ -82,6 +138,27 @@ export class ProfilePage extends Block {
     this.contentWrapper = contentWrapper;
     this.controller = new ProfilePageController();
     const actionsContainer = this.getActionContainer(this.getPreviewActionContainerItems());
+    form.setProps({
+      listeners: {
+        submit: function (e: Event) {
+          const items: Record<string, string> = Array.prototype.reduce.call((e.target as HTMLFormElement).elements,
+            (res: Record<string, string>, {name, value}: { name: string, value: string }) => {
+              if (name && value) {
+                return res[name] = value;
+              }
+            }, {});
+          console.log(JSON.stringify(items));
+          const isNotValid = form.validate();
+          if (!isNotValid) {
+            this.controller.setState(ProfileStates.Preview);
+            const actionsContainer: Container = this.getActionContainer(this.getPreviewActionContainerItems());
+            this.setInputsDisable(true);
+            this.profileForm.setProps({actionsContainer});
+          }
+          e.preventDefault();
+        }.bind(this)
+      }
+    });
     this.profileForm = form;
     this.profileForm.setProps({actionsContainer});
   }
@@ -101,6 +178,7 @@ export class ProfilePage extends Block {
         "main-profile-btn",
         "action-container__change-data-btn"
       ],
+      "button",
       this.onChangeDataClick);
     
     const changePassButton = this.getProfileActionButton("Изменить пароль",
@@ -108,6 +186,7 @@ export class ProfilePage extends Block {
         "main-profile-btn",
         "action-container__change-password-btn"
       ],
+      "button",
       this.onChangePassButtonClick);
     
     const exitButton = this.getProfileActionButton("Выйти",
@@ -115,6 +194,7 @@ export class ProfilePage extends Block {
         "main-profile-btn",
         "action-container__exit-btn"
       ],
+      "button",
       () => {
         render("body", new LoginPage());
       });
@@ -129,7 +209,7 @@ export class ProfilePage extends Block {
     const saveDataButton: Input = this.getProfileActionButton(
       "Сохранить",
       ["sign-btn", "action-container__save-data-btn"],
-      this.onSaveDataButtonClick);
+      "submit");
     return {saveDataButton};
   }
   
@@ -137,7 +217,7 @@ export class ProfilePage extends Block {
     const saveDataButton: Input = this.getProfileActionButton(
       "Сохранить",
       ["sign-btn", "action-container__save-data-btn"],
-      this.onSavePassButtonClick);
+      "submit");
     return {saveDataButton};
   }
   
@@ -152,7 +232,27 @@ export class ProfilePage extends Block {
     this.controller.setState(ProfileStates.ChangePass);
     if (!this.changePassForm) {
       const {form/*, items*/} = getChangePasswordForm();
-      form.setProps({actionsContainer: this.getActionContainer(this.getChangePassActionsContainer())});
+      form.setProps({
+        actionsContainer: this.getActionContainer(this.getChangePassActionsContainer()),
+        listeners: {
+          submit: function (e: Event) {
+            const items: Record<string, string> = Array.prototype.reduce.call((e.target as HTMLFormElement).elements,
+              (res: Record<string, string>, {name, value}: { name: string, value: string }) => {
+                if (name && value) {
+                  return res[name] = value;
+                }
+              }, {});
+            console.log(JSON.stringify(items));
+            const isNotValid = form.validate();
+            if (!isNotValid) {
+              this.controller.setState(ProfileStates.Preview);
+              this.changePassForm.hide();
+              this.profileForm.show();
+            }
+            e.preventDefault();
+          }.bind(this)
+        }
+      });
       this.changePassForm = form;
       //this.changePassFormItems = items;
       this.contentWrapper.setProps({changePassForm: this.changePassForm});
@@ -161,48 +261,41 @@ export class ProfilePage extends Block {
     this.changePassForm.show();
   }
   
-  onSavePassButtonClick(): void {
-    this.controller.setState(ProfileStates.Preview);
-    this.changePassForm.hide();
-    this.profileForm.show();
-  }
-  
   setInputsDisable(disabled: boolean): void {
     if (this.profileFormItems) {
       Object.values(this.profileFormItems).forEach((item => item.input.setProps({disabled: disabled ? "disabled" : "false"})));
     }
   }
   
-  onSaveDataButtonClick(): void {
-    this.controller.setState(ProfileStates.Preview);
-    const actionsContainer: Container = this.getActionContainer(this.getPreviewActionContainerItems());
-    this.setInputsDisable(true);
-    this.profileForm.setProps({actionsContainer});
-  }
-  
-  getProfileActionButton(value: string, additionalClasses: string[], clickHandler: () => void): Input {
-    return new Input({
-      type: "button",
+  // eslint-disable-next-line max-params
+  getProfileActionButton(value: string, additionalClasses: string[] = [], type: string = "button", clickHandler?: () => void): Input {
+    let config: blockProperty = {
+      type: type,
       value: value,
       classes: [
         "base-input-button",
         "base-input",
         ...additionalClasses
-      ],
-      listeners: {
-        click: clickHandler.bind(this)
-      }
-    });
+      ]
+    };
+    if (clickHandler) {
+      config = Object.assign(config, {
+        listeners: {
+          click: clickHandler.bind(this)
+        }
+      });
+    }
+    return new Input(config);
   }
 }
 
-function getProfileForm(enabled: boolean): {form: Form, items: Record<string, ContaineredInput>} {
+function getProfileForm(enabled: boolean): { form: Form, items: Record<string, ContaineredInput> } {
   const email: ContaineredInput = getFormItem("email", "string", "Почта", enabled);
-  const login: ContaineredInput = getFormItem("login","string", "Логин", enabled);
-  const firstName: ContaineredInput = getFormItem("first_name","string", "Имя", enabled);
-  const secondName: ContaineredInput = getFormItem("second_name","string", "Фамилия", enabled);
-  const displayName: ContaineredInput = getFormItem("display_name","string", "Имя в чате", enabled);
-  const phone: ContaineredInput = getFormItem("phone","string", "Телефон", enabled);
+  const login: ContaineredInput = getFormItem("login", "string", "Логин", enabled);
+  const firstName: ContaineredInput = getFormItem("first_name", "string", "Имя", enabled);
+  const secondName: ContaineredInput = getFormItem("second_name", "string", "Фамилия", enabled);
+  const displayName: ContaineredInput = getFormItem("display_name", "string", "Имя в чате", enabled);
+  const phone: ContaineredInput = getFormItem("phone", "string", "Телефон", enabled);
   const form: Form = new Form({
     classes: [
       "profile-form",
@@ -213,7 +306,7 @@ function getProfileForm(enabled: boolean): {form: Form, items: Record<string, Co
     firstName,
     secondName,
     displayName,
-    phone,
+    phone
   }, profileFormTemplate);
   return {
     form,
@@ -221,10 +314,10 @@ function getProfileForm(enabled: boolean): {form: Form, items: Record<string, Co
   };
 }
 
-function getChangePasswordForm(): { form: Form, items: Record<string, ContaineredInput>} {
-  const oldPass: ContaineredInput = getFormItem("email","password", "Старый пароль", true);
-  const newPass: ContaineredInput = getFormItem("login","password", "Новый пароль", true);
-  const newPassConfirmation: ContaineredInput = getFormItem("login", "password","Повторите пароль", true);
+function getChangePasswordForm(): { form: Form, items: Record<string, ContaineredInput> } {
+  const oldPass: ContaineredInput = getFormItem("email", "password", "Старый пароль", true);
+  const newPass: ContaineredInput = getFormItem("login", "password", "Новый пароль", true);
+  const newPassConfirmation: ContaineredInput = getFormItem("login", "password", "Повторите пароль", true);
   const form: Form = new Form({
     classes: [
       "profile-form",
@@ -241,11 +334,12 @@ function getChangePasswordForm(): { form: Form, items: Record<string, Containere
 }
 
 // eslint-disable-next-line max-params
-function getFormItem(name: string, type: string,  placeholder: string, enabled: boolean = true, value: string = "") {
+function getFormItem(name: string, type: string, placeholder: string, enabled: boolean = true, value: string = "") {
   let instance: ContaineredInput;
   const config: blockProperty = {
     containerClasses: getDefaultInputContainerClasses(),
     labelClasses: getDefaultInputLabelClasses(),
+    warningLabelClasses: getDefaultWarningLabelClasses(),
     alwaysShowlabel: true,
     name: name,
     type: type,
@@ -255,11 +349,7 @@ function getFormItem(name: string, type: string,  placeholder: string, enabled: 
       "base-input",
       "base-input-text"
     ],
-    listeners: {
-      change: (e: Event) => {
-        instance.setProps({value: (e.target as HTMLInputElement).value});
-      }
-    }
+    validator:  ValidatorFactory.getValidator(name)
   };
   if (value) {
     Object.assign(config, {value: value});
@@ -281,5 +371,11 @@ function getDefaultInputContainerClasses() {
 function getDefaultInputLabelClasses() {
   return [
     "profile-input-label"
+  ];
+}
+
+function getDefaultWarningLabelClasses() {
+  return [
+    "profile-warning-label"
   ];
 }

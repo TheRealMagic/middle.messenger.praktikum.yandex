@@ -3,6 +3,7 @@ import {ContaineredInput} from "../../components/containeredInput/containeredInp
 import {actionsContainerTemplate, template} from "./template";
 import {Container} from "../../components/container/container";
 import {blockProperty} from "../../components/block/types";
+import {ValidatorFactory} from "../../utils/Validators/ValidatorFactory";
 
 export class SignUpForm extends Form {
   
@@ -35,16 +36,7 @@ function getSignUpFormField(name: string, type: string, placeholder: string): Co
     labelClasses: [
       "base-label"
     ],
-    listeners: {
-      focus: (e: Event): void => {
-        instanse.setProps({value: (e.target as HTMLInputElement).value, focused: true});
-      },
-      blur: (e: Event): void => {
-        instanse.setProps({focused: false});
-        e.stopPropagation();
-        e.preventDefault();
-      }
-    }
+    validator: ValidatorFactory.getValidator(name)
   };
   instanse = new ContaineredInput(props);
   return instanse;

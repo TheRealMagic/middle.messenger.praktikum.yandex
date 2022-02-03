@@ -4,6 +4,8 @@ import {Container} from "../../components/container/container";
 import {mainContainerTemplate, template} from "./template";
 import {linkTemplate} from "../../components/block/template";
 
+import "./style.scss";
+
 
 class ErrorPage extends Block {
   

@@ -3,6 +3,7 @@ import {ContaineredInput} from "../../components/containeredInput/containeredInp
 import {actionsContainerTemplate, template} from "./template";
 import {Container} from "../../components/container/container";
 import {blockProperty} from "../../components/block/types";
+import {ValidatorFactory} from "../../utils/Validators/ValidatorFactory";
 
 export class LoginForm extends Form {
   
@@ -14,18 +15,10 @@ export class LoginForm extends Form {
       classes: getDefaultTextInputClasses(),
       containerClasses: getDefaultInputContainerClasses(),
       labelClasses: [
-        "base-label"
+        "base-label",
+        "login-label"
       ],
-      listeners: {
-        focus: (e: Event): void => {
-          nameInput.setProps({value: (e.target as HTMLInputElement).value, focused: true});
-        },
-        blur: (e: Event): void => {
-          nameInput.setProps({focused: false});
-          e.stopPropagation();
-          e.preventDefault();
-        }
-      }
+      validator: ValidatorFactory.getValidator("login")
     });
     const passInput = new ContaineredInput({
       name: "password",
@@ -34,18 +27,10 @@ export class LoginForm extends Form {
       classes: getDefaultTextInputClasses(),
       containerClasses: getDefaultInputContainerClasses(),
       labelClasses: [
-        "base-label"
+        "base-label",
+        "login-label"
       ],
-      listeners: {
-        focus: (e: Event): void => {
-          passInput.setProps({value: (e.target as HTMLInputElement).value, focused: true});
-        },
-        blur: (e: Event): void => {
-          passInput.setProps({focused: false});
-          e.stopPropagation();
-          e.preventDefault();
-        }
-      }
+      validator: ValidatorFactory.getValidator("password")
     });
     const actionContainer = new Container(
       {classes: ["login-form__action-container", "sign-action-container"], link: props.link, btn: props.btn},

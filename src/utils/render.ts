@@ -8,3 +8,11 @@ export function render(query: string, block: Block) {
   }
   return root;
 }
+
+export function renderPopup(block: Block) {
+  const root = document.querySelector("body");
+  if (root) {
+    root.appendChild(block.getContent());
+  }
+  return root;
+}

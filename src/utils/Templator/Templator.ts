@@ -47,6 +47,12 @@ export class Templator {
               this.items.push(data.getContent());
               tmplValue = tmpls.pop();
               continue;
+            } else if (this._isBlockArray(data)) {
+              data.forEach((item) => {
+                this.items.push(item.getContent());
+              });
+              tmplValue = tmpls.pop();
+              continue;
             } else {
               let replacedText = "";
               if (!this._isStringArray(data)) {
@@ -101,6 +107,10 @@ export class Templator {
   
   _isStringArray(value: unknown): value is string[] {
     return Array.isArray(value) && value.every(el => typeof el === "string");
+  }
+  
+  _isBlockArray(value: unknown): value is Block[] {
+    return Array.isArray(value) && value.every(el => el instanceof Block);
   }
   
   compile(ctx: Record<string, any>) {
