@@ -6,7 +6,7 @@
   "scripts": {
     "login": "parcel static/index.html --open",
     "build": "parcel build",
-    "start": "parcel build && set PORT=3000&& node server.js"
+    "start": "parcel build && node server.js"
   },
   "targets": {
     "default": {
