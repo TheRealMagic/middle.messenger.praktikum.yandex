@@ -2,3 +2,5 @@
 
 /.parcel-cache
 /.vscode
+/.idea
+/package-lock.json

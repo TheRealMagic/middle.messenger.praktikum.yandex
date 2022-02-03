@@ -1,0 +1,55 @@
+.main-block {
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 6px rgb(0 0 0 / 50%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.base-input {
+    border: none;
+    width: 100%;
+    outline: none;
+}
+
+.base-input-text {
+    font-size: 14px;
+    width: auto;
+}
+
+.base-input-button {
+    border-radius: 8px;
+    height: 37px;
+}
+
+.base-link {
+    text-decoration: none;
+    color: #3369F3;
+}
+
+.base-link:visited {
+    text-decoration: none;
+    color: #3369F3;
+}
+
+.error-link {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.base-label {
+    color: #999999;
+    font-size: 12px;
+    align-self: flex-start;
+}
+
+.warning-label {
+    color: red;
+}
+
+.input-container {
+    width: 100%;
+}

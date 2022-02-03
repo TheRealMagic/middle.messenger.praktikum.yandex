@@ -4,24 +4,14 @@
   "license": "ISC",
   "engine": "14.15.1",
   "scripts": {
-    "404": "parcel src/pages/404/404.html --open",
-    "500": "parcel src/pages/500/500.html --open",
     "login": "parcel static/index.html --open",
-    "signup": "parcel src/pages/SignUp/SignUp.html --open",
-    "chats": "parcel src/pages/Chats/Chats.html --open",
-    "profile": "parcel src/pages/Profile/Profile.html --open",
     "build": "parcel build",
-    "start": "node server.js"
+    "start": "parcel build && set PORT=3000&& node server.js"
   },
   "targets": {
     "default": {
       "source": [
-        "static/index.html",
-        "src/pages/SignUp/SignUp.html",
-        "src/pages/404/404.html",
-        "src/pages/500/500.html",
-        "src/pages/Chats/Chats.html",
-        "src/pages/Profile/Profile.html"
+        "static/index.html"
       ]
     }
   },
@@ -30,9 +20,17 @@
     "http": "0.0.1-security"
   },
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "autoprefixer": "^10.4.1",
-    "parcel": "^2.0.1",
+    "eslint": "^8.7.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "nanoid": "^3.2.0",
+    "parcel": "^2.2.1",
     "postcss-advanced-variables": "^3.0.1",
-    "postcss-nested": "^5.0.6"
+    "postcss-nested": "^5.0.6",
+    "stylelint": "^14.3.0",
+    "typescript": "^4.5.5"
   }
 }
