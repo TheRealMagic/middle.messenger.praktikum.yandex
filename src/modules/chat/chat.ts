@@ -77,7 +77,7 @@ export class Chat extends Block {
     this.number = props.number;
     this.chatName = props.chatName;
   
-    this.eventBus().on("newMessage", this.handleNewMessageEvent);
+    this.eventBus.on("newMessage", this.handleNewMessageEvent);
   }
   
   // eslint-disable-next-line max-params

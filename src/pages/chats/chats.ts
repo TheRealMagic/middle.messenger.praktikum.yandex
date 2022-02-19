@@ -91,7 +91,7 @@ export class ChatsPage extends Block {
     this.chatContainer = chatContainer;
     const chats: Chat[] = this.controller.getChats();
     this.chatListContainer.setProps({chats});
-    this.eventBus().on("chatActivated", this.onChatActivated.bind(this));
+    this.eventBus.on("chatActivated", this.onChatActivated.bind(this));
     chatSearchField.setProps({
       listeners: {
         keyup: this.searchChats.bind(this)}
@@ -116,7 +116,7 @@ export class ChatsPage extends Block {
       }
       targetChat.classList.add(activeChatClass);
       const chatNumber: string | undefined = targetChat.dataset.chatNumber;
-      this.eventBus().emit("chatActivated", chatNumber);
+      this.eventBus.emit("chatActivated", chatNumber);
     }
   }
   
@@ -160,7 +160,7 @@ export class ChatsPage extends Block {
       this.sendForm = sendForm;
       this.chatContainer.setProps({sendForm});
       this.chatMessagesContainer = this.getChatMessagesContainer();
-      this.eventBus().on("addMessage", this.addMessageHandler.bind(this));
+      this.eventBus.on("addMessage", this.addMessageHandler.bind(this));
       this.chatContainer.setProps({classes: ["chat-container"], textContent: ""});
     }
     const messages: Container[] = this.getStoreMessages(chatNumber);
@@ -209,7 +209,7 @@ export class ChatsPage extends Block {
     const text: string = (e.target as HTMLFormElement).message.value;
     if (text) {
       (e.target as HTMLFormElement).message.value = "";
-      this.eventBus().emit("addMessage", {isMine: true, message: text});
+      this.eventBus.emit("addMessage", {isMine: true, message: text});
     }
   }
   

@@ -1,12 +1,7 @@
 import {BaseController} from "./BaseController";
-import {Block} from "../components/block/block";
 import {Chat} from "../modules/chat/chat";
 
 export class ChatController extends BaseController {
-  
-  constructor(view: Block) {
-    super(view);
-  }
   
   getChats(filter?: string): Chat[] {
     let chats = [];

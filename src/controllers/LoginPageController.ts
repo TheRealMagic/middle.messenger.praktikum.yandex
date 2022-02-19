@@ -1,4 +1,6 @@
-export default class LoginPageController {
+import {BaseController} from "./BaseController";
+
+export default class LoginPageController extends BaseController{
   currentState: string = "login";
   
   changeState() {

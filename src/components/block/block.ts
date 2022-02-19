@@ -17,7 +17,7 @@ export class Block {
   
   public props: blockProperty;
   
-  eventBus: Function;
+  eventBus: EventBus;
   
   protected template: string | undefined= "";
   
@@ -39,7 +39,7 @@ export class Block {
     
     this.props = this._makePropsProxy(props);
     
-    this.eventBus = (): EventBus => eventBus;
+    this.eventBus = new EventBus();
     
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);
@@ -54,12 +54,12 @@ export class Block {
   
   private init(): void {
     this._createResources();
-    this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+    this.eventBus.emit(Block.EVENTS.FLOW_CDM);
   }
   
   private _componentDidMount() {
     this.componentDidMount();
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    this.eventBus.emit(Block.EVENTS.FLOW_RENDER);
   }
   _createResources() {
     const { tagName } = this._meta;
@@ -76,7 +76,7 @@ export class Block {
   }
   
   dispatchComponentDidMount(): void {
-    this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+    this.eventBus.emit(Block.EVENTS.FLOW_CDM);
   }
   
   // Может переопределять пользователь, необязательно трогать
@@ -87,7 +87,7 @@ export class Block {
   private _componentDidUpdate(oldValue?:  string | boolean, newValue?:  string | boolean): void {
     const response = this.componentDidUpdate(oldValue,  newValue);
     if (response) {
-      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+      this.eventBus.emit(Block.EVENTS.FLOW_RENDER);
     }
   }
   
@@ -128,11 +128,11 @@ export class Block {
         return Reflect.get(target, property, receiver);
       },
       // eslint-disable-next-line max-params
-      set(target: blockProperty, property: string, value, receiver) {
+      set: (target: blockProperty, property: string, value, receiver) => {
         if (target[property] !== value) {
           const oldValue = target[property];
           Reflect.set(target, property, value, receiver);
-          self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldValue, value);
+          self.eventBus.emit(Block.EVENTS.FLOW_CDU, oldValue, value);
         }
         return true;
       },

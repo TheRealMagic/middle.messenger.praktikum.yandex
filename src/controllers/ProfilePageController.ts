@@ -1,13 +1,18 @@
+import {BaseController} from "./BaseController";
+import {Block} from "../components/block/block";
+
 export const enum ProfileStates {
   Preview = "preview",
   ChangeInfo = "changeInfo",
   ChangePass = "changePass"
 }
 
-export class ProfilePageController {
+export class ProfilePageController extends BaseController {
+  
   currentState: string;
   
-  constructor() {
+  constructor(view: Block) {
+    super(view);
     this.currentState = ProfileStates.Preview;
   }
   
