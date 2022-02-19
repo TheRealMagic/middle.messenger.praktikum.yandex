@@ -1,0 +1,78 @@
+html, body, .page-wrapper {
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.login-block {
+    width: 340px;
+    min-height: 450px;
+    justify-content: center;
+}
+
+.sign-in-block {
+    width: 340px;
+    min-height: 615px;
+    justify-content: center;
+}
+
+.name-label {
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.sign-input-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-header {
+    font-size: 20px;
+    margin: 50px 0 30px;
+}
+
+.sign-action-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+.main-container {
+    width: 340px;
+    min-height: 200px;
+    text-align: center;
+    position: relative;
+}
+
+.sign-link {
+    margin: 10px 0 30px;
+}
+
+.sign-form {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex-grow: 2;
+    align-items: center;
+}
+
+.sign-btn:hover {
+    background-color: rgb(197, 190, 127);
+}
+
+.sign-btn {
+    background-color: #3369F3;
+    color: white;
+}
+
+.sign-text-input {
+    border-bottom: 1px solid #3369F3 !important;
+}
