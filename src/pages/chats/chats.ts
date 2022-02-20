@@ -15,17 +15,15 @@ import {
 import {render} from "../../utils/render";
 import {ProfilePage} from "../newprofile/profile";
 import {Chat} from "../../modules/chat/chat";
-import {ChatController} from "../../controllers/ChatController";
 import {Form} from "../../components/form/form";
 import {Label} from "../../components/label/label";
 
 
 import "./style.scss";
+import {ChatEvents} from "../../controllers/ChatsPageController";
 
 
 export class ChatsPage extends Block {
-  
-  controller: ChatController;
   
   chatListContainer: Container;
   
@@ -36,6 +34,8 @@ export class ChatsPage extends Block {
   chatMessages: Block;
   
   sendForm: Form;
+  
+  search: Input;
   
   constructor() {
     const profileLink: Block = new Block("a", {
@@ -59,13 +59,31 @@ export class ChatsPage extends Block {
       placeholder: "🔎 Поиск"
     });
     
+    const addChatButton: Container = new Container({
+      classes: [
+        "chat-list-action-button",
+        "add-chat-button"
+      ],
+      textContent: "Добавить чат"
+    });
+    const deleteChatButton: Container = new Container({
+      classes: [
+        "chat-list-action-button",
+        "delete-chat-button"
+      ],
+      textContent: "Удалить чат"
+    });
+    
     const chatListContainer: Container = new Container({
-      classes: ["chat-list-container"]
+      classes: ["chat-list-container"],
+      textContent: "Загрузка чатов..."
     }, chatContainerListTemplate);
     const leftContainer: Container = new Container({
       classes: ["left-container"],
       chatListContainer,
       chatSearchField,
+      deleteChatButton,
+      addChatButton,
       profileLink
     }, leftContainerTemplate);
     
@@ -86,22 +104,47 @@ export class ChatsPage extends Block {
       }
     });
     
-    this.controller = new ChatController(this);
     this.chatListContainer = chatListContainer;
     this.chatContainer = chatContainer;
-    const chats: Chat[] = this.controller.getChats();
-    this.chatListContainer.setProps({chats});
     this.eventBus.on("chatActivated", this.onChatActivated.bind(this));
+    this.eventBus.on(ChatEvents.REFRESH_CHATS, (chats: Chat[]) => this.refreshChatList(chats));
     chatSearchField.setProps({
       listeners: {
-        keyup: this.searchChats.bind(this)}
+        keyup: this.searchChats.bind(this)
+      }
     });
+    this.search = chatSearchField;
+    addChatButton.setProps({
+      listeners: {
+        click: () => this.eventBus.emit(ChatEvents.ADD_CHAT)
+      }
+    });
+    deleteChatButton.setProps({
+      listeners: {
+        click: () => this.eventBus.emit(ChatEvents.DELETE_CHAT)
+      }
+    });
+  }
+  
+  refreshChatList(chats: Chat[]): void {
+    if (chats.length) {
+      const searchValue: string = this.search.props.value;
+      if (searchValue) {
+        chats = chats.filter(chat => chat.title.includes(searchValue));
+      }
+      const chatBlocks: Chat[] = chats.map((chat) => {
+        return new Chat(chat);
+      });
+      this.chatListContainer.setProps({chats: chatBlocks, textContent: ""});
+    } else {
+      this.chatListContainer.setProps({textContent: "Нет чатов", chats: []});
+    }
   }
   
   searchChats(e: KeyboardEvent) {
     if (e.code === "Enter") {
       const searchValue: string = (e.target as HTMLInputElement).value || "";
-      this.chatListContainer.setProps({chats: this.controller.getChats(searchValue)});
+      this.eventBus.emit("chatSearchFieldChanged", searchValue);
     }
   }
   

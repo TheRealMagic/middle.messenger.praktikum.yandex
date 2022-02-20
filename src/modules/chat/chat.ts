@@ -8,6 +8,7 @@ import {
   template
 } from "./template";
 import {Label} from "../../components/label/label";
+import ApplicationStore from "../ApplicationState/ApplicationStore";
 
 
 export class Chat extends Block {
@@ -18,11 +19,11 @@ export class Chat extends Block {
   
   newMessageCountLabel: Block;
   
-  number: number;
+  id: number;
   
   isActive: boolean;
   
-  chatName: string;
+  title: string;
 
   constructor(props: blockProperty) {
     
@@ -30,11 +31,16 @@ export class Chat extends Block {
       imageContainerTemplate);
   
     const chatNameLabel: Label = new Label({
-      textContent: props.chatName,
+      textContent: props.title,
       classes: ["chat-item__name-label"]
     });
+    const isMyLastMessage = ApplicationStore.getState().user!.login === props.last_message?.login;
+    let lastMessageText = "<Нет сообщений>";
+    if (props.last_message?.content) {
+      lastMessageText = (isMyLastMessage ? "Вы: " : "") + props.last_message?.content;
+    }
     const chatLastMessageLabel: Label = new Label({
-      textContent: (props.isMineLastMessage ? "Вы: " : "") + props.lastMessage,
+      textContent: lastMessageText,
       classes: ["chat-item__last-message-label"]
     });
     const centerContainer: Container = new Container({
@@ -46,13 +52,16 @@ export class Chat extends Block {
   
     const lastMessageTimeLabel: Block = new Label({
       classes: ["chat-item__last-message-time-label"],
-      textContent: props.lastMessageTime
+      textContent: props.last_message?.time
     });
+    if (!props.last_message?.time) {
+      lastMessageTimeLabel.hide();
+    }
     const newMessageCountLabel: Block = new Label({
       classes: ["chat-item__new-message-label"],
-      textContent: props.newMessagesCount
+      textContent: props.unread_count
     });
-    if (!props.newMessagesCount) {
+    if (!props.unread_count) {
       newMessageCountLabel.hide();
     }
   
@@ -64,7 +73,7 @@ export class Chat extends Block {
     
     super("div", {
       classes: ["chat-item"],
-      marker: `data-chat-number='${props.number || "0"}'`,
+      marker: `data-chat-number='${props.id || "0"}'`,
       imageContainer,
       centerContainer,
       rightContainer
@@ -74,8 +83,8 @@ export class Chat extends Block {
     this.lastMessageTimeLabel = lastMessageTimeLabel;
     this.newMessageCountLabel = newMessageCountLabel;
     
-    this.number = props.number;
-    this.chatName = props.chatName;
+    this.id = props.id;
+    this.title = props.chatName;
   
     this.eventBus.on("newMessage", this.handleNewMessageEvent);
   }

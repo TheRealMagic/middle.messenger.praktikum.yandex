@@ -1,50 +1,52 @@
 import {Block} from "../../components/block/block";
-import {authLinkTemplate, loginErrorContainerTemplate, template} from "./template";
+import {authLinkTemplate, loginErrorContainerTemplate, template} from "../login/template";
 import {Label} from "../../components/label/label";
 import {Container} from "../../components/container/container";
-import {LoginForm} from "../../modules/loginForm/loginForm";
+import {SignUpForm} from "../../modules/signUpForm/signUpForm";
 import {Input} from "../../components/Input/input";
-import {Form} from "../../components/form/form";
 import {Router} from "../../utils/RouteUtils/Router";
+import {Form} from "../../components/form/form";
+import {SignUpRequest} from "../../utils/API/types";
 import {Popup} from "../../modules/popup/popup";
-import {LoginFormModel} from "./types";
 
-export default class LoginPage extends Block {
+export default class SignUpPage extends Block {
   
-  private form: Form;
+  form: Form;
   
   constructor() {
-    const label = new Label({classes: ["form-header"], textContent: "Вход"});
+    const label = new Label({classes: ["form-header"], textContent: "Регистрация"});
     const link = new Block("a", {
       classes: [
         "base-link",
         "sign-link"
       ],
       href: "/",
-      textContent: "Нет аккаунта?"
+      textContent: "Войти"
     }, authLinkTemplate);
+    
     const btn = new Input({
       type: "submit",
       value: "Авторизоваться",
       listeners: {
-        click: function () {}
+        click: function () {
+        }
       },
       classes: [
         "base-input",
         "base-input-button",
         "sign-btn",
-        "action-container__autorize-btn"
+        "action-container__sign-up-btn"
       ]
     });
-    const form = new LoginForm({link, btn});
-    const mainBlock: Container = new Container({classes: ["login-block", "main-block"], label, form});
-
-    super("div", {mainBlock}, template);
+    const form = new SignUpForm({link, btn});
+    const mainBlock: Container = new Container({classes: ["sign-in-block", "main-block"], label, form});
     
-    form.setProps({listeners: {submit: this.onLoginSubmit.bind(this)}});
+    super("div", {mainBlock}, template);
+  
     link.setProps({listeners: this.getLinkListener()});
+    form.setProps({listeners: {submit: this.onSignUpSubmit.bind(this)}});
     this.form = form;
-    this.eventBus.on("loginError", (errorText: string) => this.onLoginError(errorText));
+    this.eventBus.on("signUpError", (errorText: string) => this.onSignUpError(errorText));
   }
   
   getLinkListener(): Record<string, (e: Event) => void> {
@@ -52,26 +54,33 @@ export default class LoginPage extends Block {
       click: (e: Event) => {
         e.preventDefault();
         const router = new Router("body");
-        router.go("/sign-up");
+        router.go("/");
       }
     };
   }
   
-  onLoginSubmit(e: Event): void {
+  onSignUpSubmit(e: Event) {
     e.preventDefault();
     const form: HTMLFormElement = e.target as HTMLFormElement;
-    const data:LoginFormModel = {login: form.login.value, password: form.password.value};
+    const data: SignUpRequest = {
+      email: form.email.value,
+      login: form.login.value,
+      first_name: form.first_name.value,
+      second_name: form.second_name.value,
+      phone: form.phone.value,
+      password: form.password.value,
+    };
     const isNotValid = this.form.validate();
     if (true) {//if (!isNotValid) {
       this.eventBus.emit("formSubmit", data);
     }
   }
   
-  onLoginError(errorText: string) {
-    const loginErrorLabel: Label = new Label({
+  onSignUpError(errorText: string) {
+    const signUpErrorLabel: Label = new Label({
       textContent: errorText
     });
-    const loginErrorBtn = new Input({
+    const signUpErrorBtn = new Input({
       value: "OK",
       classes: [
         "popup-btn",
@@ -84,7 +93,7 @@ export default class LoginPage extends Block {
         }
       }
     });
-    const loginErrorPopup: Container = new Container({
+    const signUpErrorPopup: Container = new Container({
       classes: [
         "main-block",
         "change-avatar-popup"
@@ -94,10 +103,10 @@ export default class LoginPage extends Block {
           e.cancelBubble = true;
         }
       },
-      loginErrorLabel,
-      loginErrorBtn
+      signUpErrorLabel,
+      signUpErrorBtn
     }, loginErrorContainerTemplate);
-    const loginErrorMessage = new Popup({popupContainer: loginErrorPopup});
+    const loginErrorMessage = new Popup({popupContainer: signUpErrorPopup});
     loginErrorMessage.show();
   }
 }

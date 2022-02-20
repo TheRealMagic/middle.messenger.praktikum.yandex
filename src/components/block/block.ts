@@ -28,8 +28,6 @@ export class Block {
    * @returns {void}
    */
   constructor(tagName: string = "div", props?: blockProperty, template?: string) {
-    const eventBus: EventBus = new EventBus();
-    
     this.template = template;
     
     this._meta = {
@@ -41,8 +39,8 @@ export class Block {
     
     this.eventBus = new EventBus();
     
-    this._registerEvents(eventBus);
-    eventBus.emit(Block.EVENTS.INIT);
+    this._registerEvents(this.eventBus);
+    this.eventBus.emit(Block.EVENTS.INIT);
   }
   
   private _registerEvents(eventBus: EventBus) {

@@ -1,5 +1,7 @@
 import {Route} from "./Route";
 import {Constructable} from "./types";
+import get from "../get";
+import ApplicationStore from "../../modules/ApplicationState/ApplicationStore";
 
 export class Router {
   
@@ -36,18 +38,22 @@ export class Router {
     window.addEventListener("popstate", (e: PopStateEvent) => {
       this._onRoute((e.currentTarget as Window).location.pathname);
     });
-    this._onRoute(window.location.pathname);
+    let user = get(ApplicationStore.getState(), "user");
+    if (user) {
+      this.go("/messenger");
+    } else {
+      this._onRoute(window.location.pathname);
+    }
   }
   
   _onRoute(pathname: string) {
     const route = this.getRoute(pathname);
-    
-    if (this._currentRoute) {
-      this._currentRoute.leave();
-    }
-    
     this._currentRoute = route!;
-    route!.render();
+    if (!route) {
+      this.go("/404");
+    } else {
+      route.render();
+    }
   }
   
   go(pathname:string) {

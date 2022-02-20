@@ -1,5 +1,6 @@
 import {BaseController} from "./BaseController";
-import {Block} from "../components/block/block";
+
+import {ProfilePage} from "../pages/newprofile/profile";
 
 export const enum ProfileStates {
   Preview = "preview",
@@ -11,8 +12,9 @@ export class ProfilePageController extends BaseController {
   
   currentState: string;
   
-  constructor(view: Block) {
-    super(view);
+  constructor() {
+    
+    super(new ProfilePage());
     this.currentState = ProfileStates.Preview;
   }
   

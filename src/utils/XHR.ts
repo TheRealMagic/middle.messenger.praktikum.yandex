@@ -1,3 +1,5 @@
+import {PlainObject, queryString} from "./queryString";
+
 enum METHODS {
   GET = "GET",
   POST = "POST",
@@ -9,6 +11,8 @@ type XHRHeader = Record<string, string>
 
 interface XHROptions {
   data?: object,
+  credentials?: string,
+  mode?: string,
   headers?:  XHRHeader,
   timeout?: number,
   method?: METHODS | string
@@ -18,10 +22,17 @@ interface FetchOptions extends XHROptions {
   retries: number
 }
 
-class HTTPTransport {
+export class HTTPTransport {
+  
+  baseUrl: string;
+  
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl || "";
+  }
+  
   get = (url: string, options: XHROptions = {}) => {
     if (options.data && Object.keys(options.data).length) {
-      url += queryStringify(options.data);
+      url += queryString(options.data as PlainObject);
       delete options.data;
     }
     return this.request(url, {...options, method: METHODS.GET}, options.timeout);
@@ -43,11 +54,14 @@ class HTTPTransport {
     return new Promise((resolve, reject) => {
       const {method, data, headers} = options;
       const xhr = new XMLHttpRequest();
-      xhr.open(options.method as string, url);
+      xhr.open(options.method as string, this.baseUrl + url);
       if (headers) {
         Object.entries(headers).forEach(([key, value]) => {
           xhr.setRequestHeader(key, value);
         });
+      }
+      if (options.credentials === "include") {
+        xhr.withCredentials = true;
       }
       
       xhr.onload = function () {
@@ -74,16 +88,8 @@ class HTTPTransport {
   };
 }
 
-function queryStringify(data: object): string {
-  if (!Object.keys(data).length) {
-    return "";
-  }
-  // Можно делать трансформацию GET-параметров в отдельной функции
-  return "?" + Object.entries(data).map(([key, value]) => `${key}=${value}`).join("&");
-}
-
 // eslint-disable-next-line no-unused-vars
-function fetchWithRetry(url: string, options: FetchOptions): any {
+export function fetchWithRetry(url: string, options: FetchOptions): any {
   if (options && options.retries && options.retries > 1) {
     const req = new HTTPTransport();
     return req.get(url, options).then(

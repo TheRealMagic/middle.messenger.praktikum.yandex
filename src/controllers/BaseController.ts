@@ -10,11 +10,13 @@ export class BaseController {
   constructor(view: Block) {
     this.view = view;
     this.eventBus = new EventBus();
-    this.eventBus.on("initView", () => this.initView());
-    this.eventBus.emit("initView");
   }
   
-  initView() {
-    this.view.render();
+  hideView(): void {
+    this.view.hide();
+  }
+  
+  showView(): void {
+    this.view.show();
   }
 }
