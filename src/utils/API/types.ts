@@ -25,3 +25,8 @@ export type usersRequest = {
   users?: number[],
   chatId?: number
 }
+
+export type changePasswordRequest = {
+  oldPassword: string,
+  newPassword: string
+}

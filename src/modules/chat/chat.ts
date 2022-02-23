@@ -34,7 +34,7 @@ export class Chat extends Block {
       textContent: props.title,
       classes: ["chat-item__name-label"]
     });
-    const isMyLastMessage = ApplicationStore.getState().user!.login === props.last_message?.login;
+    const isMyLastMessage = ApplicationStore.getState().user!.login === props.last_message?.user.login;
     let lastMessageText = "<Нет сообщений>";
     if (props.last_message?.content) {
       lastMessageText = (isMyLastMessage ? "Вы: " : "") + props.last_message?.content;
@@ -49,14 +49,16 @@ export class Chat extends Block {
       chatLastMessageLabel
     }, centerContainerTemplate);
   
-  
     const lastMessageTimeLabel: Block = new Label({
-      classes: ["chat-item__last-message-time-label"],
-      textContent: props.last_message?.time
+      classes: ["chat-item__last-message-time-label"]
     });
-    if (!props.last_message?.time) {
+    if (props.last_message?.time) {
+      const lastMEssageDateString: string = new Date(Date.parse(props.last_message?.time)).toLocaleDateString();
+      lastMessageTimeLabel.setProps({textContent: lastMEssageDateString});
+    } else {
       lastMessageTimeLabel.hide();
     }
+    
     const newMessageCountLabel: Block = new Label({
       classes: ["chat-item__new-message-label"],
       textContent: props.unread_count
@@ -73,7 +75,7 @@ export class Chat extends Block {
     
     super("div", {
       classes: ["chat-item"],
-      marker: `data-chat-number='${props.id || "0"}'`,
+      marker: `data-chat-id='${props.id || "0"}'`,
       imageContainer,
       centerContainer,
       rightContainer

@@ -11,6 +11,7 @@ type XHRHeader = Record<string, string>
 
 interface XHROptions {
   data?: object,
+  form?: FormData,
   credentials?: string,
   mode?: string,
   headers?:  XHRHeader,
@@ -52,7 +53,7 @@ export class HTTPTransport {
   
   request = (url: string, options: XHROptions, timeout:number = 5000) => {
     return new Promise((resolve, reject) => {
-      const {method, data, headers} = options;
+      const {method, data, headers, form} = options;
       const xhr = new XMLHttpRequest();
       xhr.open(options.method as string, this.baseUrl + url);
       if (headers) {
@@ -75,8 +76,9 @@ export class HTTPTransport {
       xhr.onabort = handleError;
       xhr.onerror = handleError;
       xhr.ontimeout = handleError;
-      
-      if (method === METHODS.GET || !data) {
+      if (form) {
+        xhr.send(form);
+      } else if (method === METHODS.GET || !data ) {
         xhr.send();
       } else {
         xhr.send(JSON.stringify(data));

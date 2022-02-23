@@ -25,7 +25,7 @@ export class UserApi extends BaseAPI {
   }
   
   public static logout() {
-    return HTTP.get("auth/logout",
+    return HTTP.post("auth/logout",
       {
         credentials: "include",
         mode: "cors",

@@ -39,7 +39,8 @@ export class Router {
       this._onRoute((e.currentTarget as Window).location.pathname);
     });
     let user = get(ApplicationStore.getState(), "user");
-    if (user) {
+    const path = window.location.pathname;
+    if (user && (path === "/" || path === "/sign-up")) {
       this.go("/messenger");
     } else {
       this._onRoute(window.location.pathname);

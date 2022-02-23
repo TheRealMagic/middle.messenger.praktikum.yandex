@@ -23,7 +23,7 @@ export default class SignUpPageController extends BaseController{
   }
   
   onApplicationStoreUpdate(path: string, value: any) {
-    if (path === "user" && value) {
+    if (path === "user" && value && value.id) {
       this.onChangeUser();
     }
     if (path === "signUpError") {
@@ -33,6 +33,6 @@ export default class SignUpPageController extends BaseController{
   
   onChangeUser() {
     const router = new Router("body");
-    router.go("/messanger");
+    router.go("/messenger");
   }
 }

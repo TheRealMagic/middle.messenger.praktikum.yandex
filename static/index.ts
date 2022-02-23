@@ -8,6 +8,7 @@ import applicationStore, {StoreEvents} from "../src/modules/ApplicationState/App
 import NotFoundController from "../src/controllers/404ErrorController";
 
 
+
 UserApi.getUser()
   .then(() => onCheckUser());
 
@@ -22,9 +23,11 @@ function onCheckUser() {
     .use("/404", NotFoundController)
     .start();
   applicationStore.on(StoreEvents.Updated, (path: string, value: any) => {
-    if (path === "user" && value) {
+    if (path === "user" && !value?.id) {
       router.go("/");
     }
   });
 }
+
+
 

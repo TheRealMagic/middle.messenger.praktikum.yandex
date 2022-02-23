@@ -1,4 +1,5 @@
-export const leftContainerTemplate = "<div {{ classes chatListContainer chatSearchField deleteChatButton addChatButton profileLink }}></div>";
+export const leftContainerTemplate = "<div {{ classes chatListContainer chatSearchField deleteUserButton addUserButton " +
+  "deleteChatButton addChatButton profileLink }}></div>";
 
 export const chatContainerListTemplate = "<div {{ classes textContent chats }}></div>";
 

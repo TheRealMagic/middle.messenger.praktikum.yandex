@@ -18,7 +18,7 @@ export default class LoginPageController extends BaseController{
   }
   
   onApplicationStoreUpdate(path: string, value: any) {
-    if (path === "user" && value) {
+    if (path === "user" && value && value.id) {
       this.onChangeUser();
     }
     if (path === "loginError") {

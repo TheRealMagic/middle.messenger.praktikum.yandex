@@ -79,4 +79,32 @@ export class ChatPageApi extends BaseAPI {
         this.getChats();
       });
   }
+  
+  public getChatToken(chatId: number) {
+    HTTP.post("chats/token/" + chatId,
+      {
+        credentials: "include",
+        mode: "cors",
+        headers: {
+          "content-type": "application/json",
+        }
+      })
+      .then( (result: XMLHttpRequest)=> {
+        ApplicationStore.set(`tokens.${chatId}`, JSON.parse(result.responseText));
+      });
+  }
+  
+  public getNewMessagesCount(chatId: number) {
+    HTTP.get("chats/new/" + chatId,
+      {
+        credentials: "include",
+        mode: "cors",
+        headers: {
+          "content-type": "application/json",
+        }
+      })
+      .then( (result: XMLHttpRequest)=> {
+        ApplicationStore.set("activeChatNewMessagesCount", JSON.parse(result.responseText));
+      });
+  }
 }
