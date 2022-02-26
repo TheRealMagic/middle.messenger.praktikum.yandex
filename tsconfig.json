@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "plugins": [{"name": "typescript-plugin-css-modules"}],
-    "target": "es5",
+    "module": "ES6",
+    "target": "ES6",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
