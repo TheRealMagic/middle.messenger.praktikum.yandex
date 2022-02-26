@@ -1,1 +1,0 @@
-{"mappings":"AAAA,WAMI,kBAAmB,CAJnB,YAAa,CAEb,eAAgB,CADhB,qBAAsB,CAEtB,WAAY,CAJZ,SAMJ","sources":["src/components/form/form.css"],"sourcesContent":[".sign-form {\r\n    width: 80%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    flex-basis: 100%;\r\n    flex-grow: 2;\r\n    align-items: center;\r\n}"],"names":[],"version":3,"file":"index.36fe97f1.css.map"}
