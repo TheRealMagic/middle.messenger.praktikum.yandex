@@ -1,19 +1,13 @@
 {
   "compilerOptions": {
-    "plugins": [      {
-      "name": "typescript-plugin-css-modules",
-      "options": {
-        "classnameTransform": "dashes",
-        "customMatcher": "\\.m\\.css$",
-      }
-    }],
-    "module": "es6",
-    "target": "es6",
+    "plugins": [{"name": "typescript-plugin-css-modules"}],
+    "target": "es5",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
     "strictNullChecks": true,
+    "esModuleInterop": true,
     "outDir": "tproj"
   },
   "include": [

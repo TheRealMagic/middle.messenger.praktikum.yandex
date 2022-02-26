@@ -194,3 +194,21 @@ $activeChat: #EAE6CA;
 .my-message {
   align-self: flex-end;
 }
+
+.chat-list-action-button {
+  text-align: center;
+  width: 95%;
+  margin-top: 10px;
+  border-radius: 15px;
+  height: 30px;
+  line-height: 30px;
+  cursor: pointer;
+}
+
+.add-chat-button {
+  background-color: #5F9EA0;
+}
+
+.delete-chat-button {
+  background-color: #FA8072;
+}

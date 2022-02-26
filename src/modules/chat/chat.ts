@@ -8,6 +8,7 @@ import {
   template
 } from "./template";
 import {Label} from "../../components/label/label";
+import ApplicationStore from "../ApplicationState/ApplicationStore";
 
 
 export class Chat extends Block {
@@ -18,11 +19,11 @@ export class Chat extends Block {
   
   newMessageCountLabel: Block;
   
-  number: number;
+  id: number;
   
   isActive: boolean;
   
-  chatName: string;
+  title: string;
 
   constructor(props: blockProperty) {
     
@@ -30,11 +31,16 @@ export class Chat extends Block {
       imageContainerTemplate);
   
     const chatNameLabel: Label = new Label({
-      textContent: props.chatName,
+      textContent: props.title,
       classes: ["chat-item__name-label"]
     });
+    const isMyLastMessage = ApplicationStore.getState().user!.login === props.last_message?.user.login;
+    let lastMessageText = "<Нет сообщений>";
+    if (props.last_message?.content) {
+      lastMessageText = (isMyLastMessage ? "Вы: " : "") + props.last_message?.content;
+    }
     const chatLastMessageLabel: Label = new Label({
-      textContent: (props.isMineLastMessage ? "Вы: " : "") + props.lastMessage,
+      textContent: lastMessageText,
       classes: ["chat-item__last-message-label"]
     });
     const centerContainer: Container = new Container({
@@ -43,16 +49,21 @@ export class Chat extends Block {
       chatLastMessageLabel
     }, centerContainerTemplate);
   
-  
     const lastMessageTimeLabel: Block = new Label({
-      classes: ["chat-item__last-message-time-label"],
-      textContent: props.lastMessageTime
+      classes: ["chat-item__last-message-time-label"]
     });
+    if (props.last_message?.time) {
+      const lastMEssageDateString: string = new Date(Date.parse(props.last_message?.time)).toLocaleDateString();
+      lastMessageTimeLabel.setProps({textContent: lastMEssageDateString});
+    } else {
+      lastMessageTimeLabel.hide();
+    }
+    
     const newMessageCountLabel: Block = new Label({
       classes: ["chat-item__new-message-label"],
-      textContent: props.newMessagesCount
+      textContent: props.unread_count
     });
-    if (!props.newMessagesCount) {
+    if (!props.unread_count) {
       newMessageCountLabel.hide();
     }
   
@@ -64,7 +75,7 @@ export class Chat extends Block {
     
     super("div", {
       classes: ["chat-item"],
-      marker: `data-chat-number='${props.number || "0"}'`,
+      marker: `data-chat-id='${props.id || "0"}'`,
       imageContainer,
       centerContainer,
       rightContainer
@@ -74,10 +85,10 @@ export class Chat extends Block {
     this.lastMessageTimeLabel = lastMessageTimeLabel;
     this.newMessageCountLabel = newMessageCountLabel;
     
-    this.number = props.number;
-    this.chatName = props.chatName;
+    this.id = props.id;
+    this.title = props.chatName;
   
-    this.eventBus().on("newMessage", this.handleNewMessageEvent);
+    this.eventBus.on("newMessage", this.handleNewMessageEvent);
   }
   
   // eslint-disable-next-line max-params
