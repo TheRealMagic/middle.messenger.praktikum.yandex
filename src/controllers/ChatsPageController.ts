@@ -7,9 +7,9 @@ import {Input} from "../components/Input/input";
 import {Container} from "../components/container/container";
 import {Popup} from "../modules/popup/popup";
 import {Label} from "../components/label/label";
-import {addChatTemplate, deleteChatTemplate} from "../pages/Chats/template";
+import {addChatTemplate, deleteChatTemplate} from "../pages/chats/template";
 import get from "../utils/get";
-import {ReceivedMessage} from "../pages/Chats/types";
+import {ReceivedMessage} from "../pages/chats/types";
 
 const chatPageApi = new ChatPageApi();
 
