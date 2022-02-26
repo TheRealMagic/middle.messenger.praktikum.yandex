@@ -1,6 +1,6 @@
 import {BaseController} from "./BaseController";
 import {Chat} from "../modules/chat/chat";
-import {ChatsPage} from "../pages/Chats/chats";
+import {ChatsPage} from "../pages/chats/chats";
 import {ChatPageApi} from "../utils/API/ChatPageApi";
 import ApplicationStore, {StoreEvents} from "../modules/ApplicationState/ApplicationStore";
 import {Input} from "../components/Input/input";
