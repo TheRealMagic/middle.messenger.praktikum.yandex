@@ -84,7 +84,7 @@ export class HTTPTransport {
         xhr.send(JSON.stringify(data));
       }
       setTimeout( () => {
-        handleError();
+        reject(new Error("timeout"));
       }, timeout);
     });
   };

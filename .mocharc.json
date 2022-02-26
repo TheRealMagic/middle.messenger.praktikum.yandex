@@ -1,0 +1,10 @@
+{
+  "extension": ["ts"],
+  "spec": "./**/*.spec.ts",
+  "require": [
+    "ts-node/register",
+    "ignore-styles",
+    "jsdom-global/register"
+  ],
+  "timeout": 10000
+}

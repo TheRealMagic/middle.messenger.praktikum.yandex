@@ -273,7 +273,7 @@ export class ChatsPage extends Block {
         }
       }, sendFormTemplate);
       this.sendForm = sendForm;
-      this.chatMessagesContainer = this.getChatMessagesContainer(chatId);
+      this.chatMessagesContainer = this.getChatMessagesContainer(Number(chatId));
     }
     
     this.activeChatId = Number.parseInt(chatId);

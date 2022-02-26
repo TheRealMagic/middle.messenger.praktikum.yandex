@@ -168,7 +168,7 @@ export class ProfilePage extends Block {
               return res;
             }, {});
           const isNotValid = form.validate();
-          if (true) {//(!isNotValid) {
+          if (!isNotValid) {
             this.eventBus.emit(ProfilePageEvents.CHANGE_DATA, items);
             const actionsContainer: Container = this.getActionContainer(this.getPreviewActionContainerItems());
             this.setInputsDisable(true);
@@ -281,7 +281,7 @@ export class ProfilePage extends Block {
               }, {});
             
             const isNotValid = form.validate();
-            if (true) {//(!isNotValid) {
+            if (!isNotValid) {
               this.eventBus.emit(ProfilePageEvents.CHANGE_PASSWORD, items);
               this.changePassForm.hide();
               this.profileForm.show();

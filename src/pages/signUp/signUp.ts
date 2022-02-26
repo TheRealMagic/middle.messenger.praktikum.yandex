@@ -71,7 +71,7 @@ export default class SignUpPage extends Block {
       password: form.password.value,
     };
     const isNotValid = this.form.validate();
-    if (true) {//if (!isNotValid) {
+    if (!isNotValid) {
       this.eventBus.emit("formSubmit", data);
     }
   }

@@ -19,7 +19,7 @@ export class Block {
   
   eventBus: EventBus;
   
-  protected template: string | undefined= "";
+  protected template: string | undefined = "";
   
   /** JSDoc
    * @param {string} tagName
