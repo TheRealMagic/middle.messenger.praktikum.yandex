@@ -2,6 +2,7 @@ import {BaseAPI} from "./BaseApi";
 import {HTTPTransport} from "../XHR";
 import ApplicationStore from "../../modules/ApplicationState/ApplicationStore";
 import {User} from "../../models/User";
+import get from "../get";
 
 const HTTP = new HTTPTransport("https://ya-praktikum.tech/api/v2/");
 
@@ -17,10 +18,12 @@ export class UserApi extends BaseAPI {
       })
       .then((result: XMLHttpRequest) => {
         let user: User | null = null;
-        if (result.status === 200) {
-          user = JSON.parse(result.responseText);
-        }
+        user = JSON.parse(result.responseText);
         ApplicationStore.set("user", user);
+      }).catch(() => {
+        if (get(ApplicationStore.getState(), "user")) {
+          ApplicationStore.set("user", null);
+        }
       });
   }
   

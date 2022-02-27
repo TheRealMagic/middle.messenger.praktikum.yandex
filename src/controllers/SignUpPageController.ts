@@ -14,12 +14,8 @@ export default class SignUpPageController extends BaseController{
     ApplicationStore.on(StoreEvents.Updated, (path: string, value: any) => this.onApplicationStoreUpdate(path, value));
   }
   
-  onFormSubmit(data: SignUpRequest): void {
-    try {
-      signUpPageApi.register(data);
-    } catch (e) {
-      this.view.eventBus.emit("singUpError");
-    }
+  onFormSubmit(data: SignUpRequest) {
+    signUpPageApi.register(data);
   }
   
   onApplicationStoreUpdate(path: string, value: any) {

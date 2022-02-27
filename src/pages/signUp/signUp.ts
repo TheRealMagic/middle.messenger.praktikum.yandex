@@ -1,5 +1,5 @@
 import {Block} from "../../components/block/block";
-import {authLinkTemplate, loginErrorContainerTemplate, template} from "../login/template";
+import {authLinkTemplate, template} from "../login/template";
 import {Label} from "../../components/label/label";
 import {Container} from "../../components/container/container";
 import {SignUpForm} from "../../modules/signUpForm/signUpForm";
@@ -7,7 +7,7 @@ import {Input} from "../../components/Input/input";
 import {Router} from "../../utils/RouteUtils/Router";
 import {Form} from "../../components/form/form";
 import {SignUpRequest} from "../../utils/API/types";
-import {Popup} from "../../modules/popup/popup";
+import ErrorPopup from "../../modules/popup/errorPopup";
 
 export default class SignUpPage extends Block {
   
@@ -77,36 +77,6 @@ export default class SignUpPage extends Block {
   }
   
   onSignUpError(errorText: string) {
-    const signUpErrorLabel: Label = new Label({
-      textContent: errorText
-    });
-    const signUpErrorBtn = new Input({
-      value: "OK",
-      classes: [
-        "popup-btn",
-        "base-input-button",
-        "sign-btn"
-      ],
-      listeners: {
-        click: () => {
-          loginErrorMessage.hide();
-        }
-      }
-    });
-    const signUpErrorPopup: Container = new Container({
-      classes: [
-        "main-block",
-        "change-avatar-popup"
-      ],
-      listeners: {
-        click: (e: Event) => {
-          e.cancelBubble = true;
-        }
-      },
-      signUpErrorLabel,
-      signUpErrorBtn
-    }, loginErrorContainerTemplate);
-    const loginErrorMessage = new Popup({popupContainer: signUpErrorPopup});
-    loginErrorMessage.show();
+    ErrorPopup.showErrorPopup(errorText);
   }
 }

@@ -10,6 +10,7 @@ import {Label} from "../components/label/label";
 import {addChatTemplate, deleteChatTemplate} from "../pages/chats/template";
 import get from "../utils/get";
 import {ReceivedMessage} from "../pages/chats/types";
+import {SocketUtils} from "../utils/SocketUtils";
 
 const chatPageApi = new ChatPageApi();
 
@@ -28,12 +29,11 @@ export enum ChatEvents {
 
 export class ChatsPageController extends BaseController {
   
-  private sockets: Record<string, any> = {};
+  public sockets: Record<string, any> = {};
   
   constructor() {
     super(new ChatsPage());
     this.subscribe();
-    this.publish();
   }
   
   subscribe() {
@@ -47,10 +47,6 @@ export class ChatsPageController extends BaseController {
     this.view.eventBus.on(ChatEvents.SEND_MESSAGE, (chanId: number, message: string) => this.sendMessage(chanId, message));
   }
   
-  publish() {
-    this.view.eventBus.emit(ChatEvents.GET_CHATS);
-  }
-  
   getChats(): void {
     chatPageApi.getChats();
   }
@@ -58,9 +54,7 @@ export class ChatsPageController extends BaseController {
   sendMessage(chatId: number, message: string) {
     const socket: WebSocket = this.sockets[chatId];
     if (socket) {
-      socket.send(JSON.stringify({
-        content: message,
-        type: "message"}));
+      SocketUtils.sendMessage(socket, message);
     }
   }
   
@@ -76,12 +70,14 @@ export class ChatsPageController extends BaseController {
     }
   }
   
+  onViewRendered() {
+    this.view.eventBus.emit(ChatEvents.GET_CHATS);
+    this.view.eventBus.emit(ChatEvents.ON_CHAT_DESELECTED);
+  }
+  
   onNewMessagesCountCHanged() {
     const activeChatId = (this.view as ChatsPage).activeChatId;
-    this.sockets[activeChatId].send(JSON.stringify(  {
-      content: "0",
-      type: "get old"
-    }));
+    SocketUtils.sendMessage(this.sockets[activeChatId], "0", "get old");
   }
   
   onChatsUpdated(chats: Chat[]) {
@@ -95,56 +91,11 @@ export class ChatsPageController extends BaseController {
     }
     const activeChatId: number = (this.view as ChatsPage).activeChatId;
     if (!this.sockets[activeChatId]) {
-      this.createSocket(activeChatId, token);
+      this.sockets[activeChatId] = SocketUtils.createSocket(activeChatId, token);
+      SocketUtils.applySocketListeners(this.sockets[activeChatId], activeChatId, this);
     } else {
       chatPageApi.getNewMessagesCount(activeChatId);
     }
-  }
-  
-  createSocket(chatId: number, token: string) {
-    if (!chatId) {
-      return;
-    }
-    const userId = get(ApplicationStore.getState(), "user.id");
-    if (!userId) {
-      return;
-    }
-    const socketTemplate: string = `wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`;
-    const socket: WebSocket = this.sockets[chatId] = new WebSocket(socketTemplate);
-    this.applySocketListeners(socket, chatId);
-  }
-  
-  applySocketListeners(socket: WebSocket, chatId: number) {
-    socket.addEventListener("open", () => {
-      chatPageApi.getNewMessagesCount(chatId);
-      console.log("Соединение установлено " + chatId);
-    });
-    socket.addEventListener("close", event => {
-      if (event.wasClean) {
-        console.log("Соединение закрыто чисто");
-      } else {
-        console.log("Обрыв соединения");
-      }
-      console.log(chatId + ` Код: ${event.code} | Причина: ${event.reason}`);
-      delete this.sockets[chatId];
-    });
-    socket.addEventListener("message", event => {
-      const message: any = JSON.parse((event as any).data);
-      if (Array.isArray(message)) {
-        this.view.eventBus.emit(ChatEvents.RECEIVE_MESSAGE, message);
-      }
-      if (message.type === "message") {
-        this.view.eventBus.emit(ChatEvents.RECEIVE_MESSAGE, [message]);
-      }
-    });
-  
-    socket.addEventListener("error", event => {
-      console.log("Ошибка", (event as any).message);
-    });
-    
-    setInterval(() => {
-      socket.send(JSON.stringify({type: "ping"}));
-    },  1 * 60 * 1000);
   }
   
   onReceiveMessage(message: ReceivedMessage) {

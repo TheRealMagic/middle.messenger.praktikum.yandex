@@ -45,5 +45,3 @@ export class ProfilePageApi extends BaseAPI {
       });
   }
 }
-  
-

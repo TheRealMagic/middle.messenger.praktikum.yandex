@@ -32,10 +32,6 @@ export default class LoginPageController extends BaseController{
   }
   
   onFormSubmit(data: LoginFormModel): void {
-    try {
-      loginPageApi.login(data);
-    } catch (e) {
-      ApplicationStore.set("loginError", e);
-    }
+    loginPageApi.login(data);
   }
 }

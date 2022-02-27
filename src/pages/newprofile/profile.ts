@@ -291,7 +291,6 @@ export class ProfilePage extends Block {
         }
       });
       this.changePassForm = form;
-      //this.changePassFormItems = items;
       this.contentWrapper.setProps({changePassForm: this.changePassForm});
     }
     this.profileForm.hide();
