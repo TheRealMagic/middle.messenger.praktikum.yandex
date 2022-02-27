@@ -2,6 +2,7 @@ import {BaseAPI} from "./BaseApi";
 import {HTTPTransport} from "../XHR";
 import {SignUpRequest} from "./types";
 import {UserApi} from "./UserApi";
+import ApplicationStore from "../../modules/ApplicationState/ApplicationStore";
 
 const HTTP = new HTTPTransport("https://ya-praktikum.tech/api/v2/");
 
@@ -16,10 +17,10 @@ export class SignUpPageApi extends BaseAPI {
         },
         data: user,
       })
-      .then((result: XMLHttpRequest) => {
-        if (result.status === 200) {
-          UserApi.getUser();
-        }
+      .then(() => {
+        UserApi.getUser();
+      }).catch((result: XMLHttpRequest) => {
+        ApplicationStore.set("signUpError", JSON.parse(result.responseText).reason);
       });
   }
 }

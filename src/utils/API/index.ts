@@ -1,3 +1,1 @@
-import {LoginPageApi} from "./LoginPageApi";
-
-export {LoginPageApi};
+export {LoginPageApi} from "./LoginPageApi";

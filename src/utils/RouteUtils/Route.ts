@@ -1,7 +1,7 @@
 import {blockProperty} from "../../components/block/types";
 import {render} from "../render";
 import {Constructable} from "./types";
-import {BaseController} from "../../controllers/BaseController";
+import {BaseController, BaseControllerEvents} from "../../controllers/BaseController";
 
 export class Route {
   
@@ -41,6 +41,7 @@ export class Route {
       this._controller = new this._controllerClass(this._props);
     }
     render(this._props.rootQuery, this._controller.view!);
+    this._controller.eventBus.emit(BaseControllerEvents.VIEW_RENDERED);
   }
 }
 

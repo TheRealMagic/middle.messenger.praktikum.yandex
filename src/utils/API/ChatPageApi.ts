@@ -103,7 +103,7 @@ export class ChatPageApi extends BaseAPI {
           "content-type": "application/json",
         }
       })
-      .then( (result: XMLHttpRequest)=> {
+      .then((result: XMLHttpRequest)=> {
         ApplicationStore.set("activeChatNewMessagesCount", JSON.parse(result.responseText));
       });
   }

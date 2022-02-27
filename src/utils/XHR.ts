@@ -66,9 +66,13 @@ export class HTTPTransport {
       }
       
       xhr.onload = function () {
-        resolve(xhr);
+        if (this.status !== 200) {
+          reject(xhr);
+        } else {
+          resolve(xhr);
+        }
       };
-      
+  
       const handleError = () => {
         reject(new Error("Ошибка запроса"));
       };

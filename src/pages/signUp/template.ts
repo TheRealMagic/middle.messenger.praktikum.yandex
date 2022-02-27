@@ -1,1 +1,0 @@
-export const signUpErrorContainerTemplate: string  = "<div {{ classes textContent signUpErrorBtn signUpErrorLabel }}></div>";

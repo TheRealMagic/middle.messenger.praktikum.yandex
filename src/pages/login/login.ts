@@ -1,13 +1,13 @@
 import {Block} from "../../components/block/block";
-import {authLinkTemplate, loginErrorContainerTemplate, template} from "./template";
+import {authLinkTemplate, template} from "./template";
 import {Label} from "../../components/label/label";
 import {Container} from "../../components/container/container";
 import {LoginForm} from "../../modules/loginForm/loginForm";
 import {Input} from "../../components/Input/input";
 import {Form} from "../../components/form/form";
 import {Router} from "../../utils/RouteUtils/Router";
-import {Popup} from "../../modules/popup/popup";
 import {LoginFormModel} from "./types";
+import ErrorPopup from "../../modules/popup/errorPopup";
 
 export default class LoginPage extends Block {
   
@@ -62,42 +62,12 @@ export default class LoginPage extends Block {
     const form: HTMLFormElement = e.target as HTMLFormElement;
     const data:LoginFormModel = {login: form.login.value, password: form.password.value};
     const isNotValid = this.form.validate();
-    if (!isNotValid) {
+    if (!isNotValid || true) {
       this.eventBus.emit("formSubmit", data);
     }
   }
   
   onLoginError(errorText: string) {
-    const loginErrorLabel: Label = new Label({
-      textContent: errorText
-    });
-    const loginErrorBtn = new Input({
-      value: "OK",
-      classes: [
-        "popup-btn",
-        "base-input-button",
-        "sign-btn"
-      ],
-      listeners: {
-        click: () => {
-          loginErrorMessage.hide();
-        }
-      }
-    });
-    const loginErrorPopup: Container = new Container({
-      classes: [
-        "main-block",
-        "change-avatar-popup"
-      ],
-      listeners: {
-        click: (e: Event) => {
-          e.cancelBubble = true;
-        }
-      },
-      loginErrorLabel,
-      loginErrorBtn
-    }, loginErrorContainerTemplate);
-    const loginErrorMessage = new Popup({popupContainer: loginErrorPopup});
-    loginErrorMessage.show();
+    ErrorPopup.showErrorPopup(errorText);
   }
 }
