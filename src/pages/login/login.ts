@@ -62,7 +62,7 @@ export default class LoginPage extends Block {
     const form: HTMLFormElement = e.target as HTMLFormElement;
     const data:LoginFormModel = {login: form.login.value, password: form.password.value};
     const isNotValid = this.form.validate();
-    if (!isNotValid || true) {
+    if (!isNotValid) {
       this.eventBus.emit("formSubmit", data);
     }
   }

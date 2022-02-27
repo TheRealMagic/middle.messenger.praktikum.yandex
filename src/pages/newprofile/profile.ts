@@ -114,7 +114,6 @@ export class ProfilePage extends Block {
     //region avatar
     const img: Block = new Block("img", {classes: ["avatar"]}, imgTemplate);
     
-    debugger
     const avatarSrc = get(state, "user.avatar");
     if (avatarSrc) {
       img.setProps({src: baseYaUrl + avatarSrc});
@@ -292,7 +291,6 @@ export class ProfilePage extends Block {
         }
       });
       this.changePassForm = form;
-      //this.changePassFormItems = items;
       this.contentWrapper.setProps({changePassForm: this.changePassForm});
     }
     this.profileForm.hide();
