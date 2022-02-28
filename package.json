@@ -6,7 +6,8 @@
   "scripts": {
     "login": "parcel static/index.html --open",
     "build": "parcel build",
-    "start": "parcel build && node server.js"
+    "start": "parcel build && node server.js",
+    "test": "mocha"
   },
   "targets": {
     "default": {
@@ -21,12 +22,21 @@
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.2.1",
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.1.0",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
+    "babel-plugin-transform-scss": "^1.1.0",
+    "chai": "^4.3.6",
     "eslint": "^8.7.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
+    "ignore-styles": "^5.0.1",
+    "jsdom": "^19.0.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^9.2.1",
     "parcel": "^2.2.1",
     "stylelint": "^14.3.0",
+    "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   }
 }

@@ -12,20 +12,22 @@ import {
   sendFormTemplate,
   template
 } from "./template";
-import {render} from "../../utils/render";
-import {ProfilePage} from "../newprofile/profile";
 import {Chat} from "../../modules/chat/chat";
-import {ChatController} from "../../controllers/ChatController";
 import {Form} from "../../components/form/form";
 import {Label} from "../../components/label/label";
 
 
 import "./style.scss";
+import {ChatEvents} from "../../controllers/ChatsPageController";
+import {Router} from "../../utils/RouteUtils/Router";
+import ApplicationStore from "../../modules/ApplicationState/ApplicationStore";
+import get from "../../utils/get";
+import {ReceivedMessage} from "./types";
 
+
+const activeChatClass = "chat-item__active";
 
 export class ChatsPage extends Block {
-  
-  controller: ChatController;
   
   chatListContainer: Container;
   
@@ -37,6 +39,16 @@ export class ChatsPage extends Block {
   
   sendForm: Form;
   
+  search: Input;
+  
+  deleteChatButton: Container;
+  
+  addUserButton: Container;
+  
+  deleteUserButton: Container;
+  
+  activeChatId: number;
+  
   constructor() {
     const profileLink: Block = new Block("a", {
       classes: ["left-container__profile-link", "base-link"],
@@ -45,7 +57,8 @@ export class ChatsPage extends Block {
       listeners: {
         click: (e: Event) => {
           e.preventDefault();
-          render("body", new ProfilePage());
+          const router = new Router("body");
+          router.go("/settings");
         }
       }
     }, linkTemplate);
@@ -59,13 +72,47 @@ export class ChatsPage extends Block {
       placeholder: "🔎 Поиск"
     });
     
+    const addChatButton: Container = new Container({
+      classes: [
+        "chat-list-action-button",
+        "add-chat-button"
+      ],
+      textContent: "Добавить чат"
+    });
+    const deleteChatButton: Container = new Container({
+      classes: [
+        "chat-list-action-button",
+        "delete-chat-button"
+      ],
+      textContent: "Удалить чат"
+    });
+    const addUserButton: Container = new Container({
+      classes: [
+        "chat-list-action-button",
+        "add-chat-button"
+      ],
+      textContent: "Добавить пользователя в чат"
+    });
+    const deleteUserButton: Container = new Container({
+      classes: [
+        "chat-list-action-button",
+        "delete-chat-button"
+      ],
+      textContent: "Удалить пользователя из чата"
+    });
+    
     const chatListContainer: Container = new Container({
-      classes: ["chat-list-container"]
+      classes: ["chat-list-container"],
+      textContent: "Загрузка чатов..."
     }, chatContainerListTemplate);
     const leftContainer: Container = new Container({
       classes: ["left-container"],
       chatListContainer,
       chatSearchField,
+      deleteChatButton,
+      addChatButton,
+      addUserButton,
+      deleteUserButton,
       profileLink
     }, leftContainerTemplate);
     
@@ -86,41 +133,109 @@ export class ChatsPage extends Block {
       }
     });
     
-    this.controller = new ChatController(this);
     this.chatListContainer = chatListContainer;
     this.chatContainer = chatContainer;
-    const chats: Chat[] = this.controller.getChats();
-    this.chatListContainer.setProps({chats});
-    this.eventBus().on("chatActivated", this.onChatActivated.bind(this));
+    this.submit();
     chatSearchField.setProps({
       listeners: {
-        keyup: this.searchChats.bind(this)}
+        keyup: this.searchChats.bind(this)
+      }
     });
+    this.search = chatSearchField;
+    addChatButton.setProps({
+      listeners: {
+        click: () => this.eventBus.emit(ChatEvents.ADD_CHAT)
+      }
+    });
+    deleteChatButton.setProps({
+      listeners: {
+        click: () => this.eventBus.emit(ChatEvents.DELETE_CHAT, this.activeChatId)
+      }
+    });
+    addUserButton.setProps({
+      listeners: {
+        click: () => this.eventBus.emit(ChatEvents.ADD_CHAT_USER, this.activeChatId)
+      }
+    });
+    deleteUserButton.setProps({
+      listeners: {
+        click: () => this.eventBus.emit(ChatEvents.DELETE_CHAT_USER, this.activeChatId)
+      }
+    });
+    deleteChatButton.hide();
+    addUserButton.hide();
+    deleteUserButton.hide();
+    this.deleteChatButton = deleteChatButton;
+    this.addUserButton = addUserButton;
+    this.deleteUserButton = deleteUserButton;
+    this.deleteUserButton = deleteUserButton;
+  }
+  
+  submit() {
+    this.eventBus.on(ChatEvents.ON_CHAT_ACTIVATED, this.onChatActivated.bind(this));
+    this.eventBus.on(ChatEvents.REFRESH_CHATS, (chats: Chat[]) => this.refreshChatList(chats));
+    this.eventBus.on(ChatEvents.ON_CHAT_DESELECTED, () => this.onChatDeselected());
+    this.eventBus.on(ChatEvents.RECEIVE_MESSAGE, (messages: ReceivedMessage[]) => {
+      const config = messages.map( message  => {
+        return {
+          isMine: get(ApplicationStore.getState(), "user.id") === message.user_id,
+          message: message.content
+        };
+      });
+      this.addMessageHandler(config);
+    });
+  }
+  
+  refreshChatList(chats: Chat[]): void {
+    if (chats.length) {
+      const searchValue: string = this.search.props.value;
+      if (searchValue) {
+        chats = chats.filter(chat => chat.title.includes(searchValue));
+      }
+      const chatBlocks: Chat[] = chats.map((chat) => {
+        return new Chat(chat);
+      });
+      this.chatListContainer.setProps({chats: chatBlocks, textContent: ""});
+    } else {
+      this.chatListContainer.setProps({textContent: "Нет чатов", chats: []});
+    }
+  }
+  
+  onChatDeselected() {
+    this.chatContainer.element.classList.remove("chat-container");
+    this.chatContainer.setProps({
+      classes: ["chat-container__empty"],
+      textContent: "Выберите чат чтобы отправить сообщение",
+      chatMessagesContainer: null,
+      sendForm: null
+    });
+    this.deleteChatButton.hide();
+    this.addUserButton.hide();
+    this.deleteUserButton.hide();
   }
   
   searchChats(e: KeyboardEvent) {
     if (e.code === "Enter") {
       const searchValue: string = (e.target as HTMLInputElement).value || "";
-      this.chatListContainer.setProps({chats: this.controller.getChats(searchValue)});
+      this.eventBus.emit("chatSearchFieldChanged", searchValue);
     }
   }
   
   onChatItemClick(e: Event): void {
     const target: HTMLElement = (e.target as HTMLElement);
     const targetChat: HTMLElement | null = target.closest<HTMLElement>(".chat-item");
-    if (targetChat) {
-      const activeChatClass = "chat-item__active";
+    if (targetChat && Number(targetChat.dataset.chatId) !== this.activeChatId) {
       const activeItem: HTMLElement | null = this.element.querySelector(`.${activeChatClass}`);
       if (activeItem) {
         activeItem.classList.remove(activeChatClass);
       }
       targetChat.classList.add(activeChatClass);
-      const chatNumber: string | undefined = targetChat.dataset.chatNumber;
-      this.eventBus().emit("chatActivated", chatNumber);
+      const chatId: string | undefined = targetChat.dataset.chatId;
+      this.eventBus.emit("chatActivated", chatId);
     }
   }
   
-  onChatActivated(chatNumber: string = ""): void {
+  onChatActivated(chatId: string = ("" + this.activeChatId || "")): void {
     if (!this.sendForm) {
       const attachButton: Label = new Label({
         classes: [
@@ -158,35 +273,37 @@ export class ChatsPage extends Block {
         }
       }, sendFormTemplate);
       this.sendForm = sendForm;
-      this.chatContainer.setProps({sendForm});
-      this.chatMessagesContainer = this.getChatMessagesContainer();
-      this.eventBus().on("addMessage", this.addMessageHandler.bind(this));
-      this.chatContainer.setProps({classes: ["chat-container"], textContent: ""});
+      this.chatMessagesContainer = this.getChatMessagesContainer(Number(chatId));
     }
-    const messages: Container[] = this.getStoreMessages(chatNumber);
-    this.chatMessagesContainer.setProps({messages});
-    this.chatContainer.setProps({chatMessagesContainer: this.chatMessagesContainer});
+    
+    this.activeChatId = Number.parseInt(chatId);
+    this.deleteChatButton.show();
+    this.addUserButton.show();
+    this.deleteUserButton.show();
+    this.chatContainer.setProps({
+      classes: ["chat-container"],
+      textContent: "",
+      sendForm: this.sendForm,
+      chatMessagesContainer: this.chatMessagesContainer
+    });
   }
   
-  getChatMessagesContainer(): Container {
+  getChatMessagesContainer(chatId: Number): Container {
     return new Container({
+      chatId,
       classes: [
         "chat-messages-container",
       ],
     }, chatMessagesContainerTemplate);
   }
   
-  getMessages(chatNumber: string): Container[] {
-    return this.chatMessagesContainer.props.messages || this.getStoreMessages(chatNumber);
-  }
-  
-  getStoreMessages(chatNumber: string = ""): Container[] {
-    const messages: { isMine: boolean, message: string }[] = this.controller.getChatMessages(chatNumber);
-    const messageBlocks: Block[] = [];
-    messages.forEach((mes) => {
-      messageBlocks.push(this.getChatItem(mes));
-    });
-    return messageBlocks;
+  getMessages(): Container[] {
+    if (this.chatMessagesContainer.props.chatId === this.activeChatId) {
+      return this.chatMessagesContainer.props.messages || [];
+    } else {
+      return [];
+    }
+    
   }
   
   getChatItem(config: { isMine: boolean, message: string }): Container {
@@ -209,16 +326,18 @@ export class ChatsPage extends Block {
     const text: string = (e.target as HTMLFormElement).message.value;
     if (text) {
       (e.target as HTMLFormElement).message.value = "";
-      this.eventBus().emit("addMessage", {isMine: true, message: text});
+      this.eventBus.emit(ChatEvents.SEND_MESSAGE, this.activeChatId, text);
     }
   }
   
-  addMessageHandler(message: { isMine: boolean, message: string }) {
-    const currentMessages: Container[] = this.getMessages("");
-    currentMessages.push(this.getChatItem(message));
-    const chatMessagesContainer: Container = this.getChatMessagesContainer();
-    chatMessagesContainer.setProps({messages: currentMessages});
-    this.chatContainer.setProps({chatMessagesContainer});
+  addMessageHandler(messages: { isMine: boolean, message: string }[]) {
+    const currentMessages: Container[] = this.getMessages();
+    for (let i = messages.length - 1; i >= 0; i--) {
+      currentMessages.push(this.getChatItem(messages[i]));
+    }
+    this.chatMessagesContainer = this.getChatMessagesContainer(this.activeChatId);
+    this.chatMessagesContainer.setProps({messages: currentMessages});
+    this.chatContainer.setProps({chatMessagesContainer: this.chatMessagesContainer});
   }
   
 }

@@ -13,6 +13,6 @@ export const changePassFormTemplate = "<form {{ classes actionsContainer newPass
 export const actionsContainerTemplate = "<div {{ classes exitButton changePassButton changeDataButton saveDataButton " +
   "  }}></div>";
 
-export const changeAvatarTemplate = "<div {{ classes changeAvatarButton changeAvatarLink changeAvatarTitle }}></div>";
+export const changeAvatarTemplate = "<form {{ classes changeAvatarButton changeAvatarLink changeAvatarTitle }}></form>";
 
 export const template = "<div {{ classes profileContainer backBtnContainer }}></div>";

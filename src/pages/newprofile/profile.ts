@@ -11,20 +11,22 @@ import {
   profileFormTemplate,
   template
 } from "./template";
-import {imgTemplate, linkTemplate} from "../../components/block/template";
-import {render} from "../../utils/render";
-import {ChatsPage} from "../chats/chats";
+import {imgTemplate} from "../../components/block/template";
 import {Form} from "../../components/form/form";
 import {blockProperty} from "../../components/block/types";
 import {ContaineredInput} from "../../components/containeredInput/containeredInput";
-import {ProfilePageController, ProfileStates} from "../../controllers/ProfilePageController";
+import {ProfilePageEvents, ProfileStates} from "../../controllers/ProfilePageController";
 import {Input} from "../../components/Input/input";
-import LoginPage from "../login/login";
 import {Popup} from "../../modules/popup/popup";
 import {Label} from "../../components/label/label";
 import {ValidatorFactory} from "../../utils/Validators/ValidatorFactory";
 
 import "./style.scss";
+import {Router} from "../../utils/RouteUtils/Router";
+import ApplicationStore, {StoreEvents} from "../../modules/ApplicationState/ApplicationStore";
+import get from "../../utils/get";
+
+const baseYaUrl: string = "https://ya-praktikum.tech/api/v2";
 
 export class ProfilePage extends Block {
   
@@ -34,19 +36,19 @@ export class ProfilePage extends Block {
   
   private changePassForm: Form;
   
+  private avatarImg: Container;
+  
   private profileFormItems: Record<string, ContaineredInput>;
   
-  //private changePassFormItems: Record<string, ContaineredInput>;
-  
-  private controller: ProfilePageController;
-  
   constructor() {
+    const state = ApplicationStore.getState();
     const backButton: Container = new Container({
       classes: ["back-btn-container__back-btn"],
       textContent: "❮",
       listeners: {
         click: () => {
-          render("body", new ChatsPage());
+          const router = new Router("body");
+          router.go("/messenger");
         }
       }
     });
@@ -59,28 +61,32 @@ export class ProfilePage extends Block {
     const changeAvatarTitle: Label = new Label({
       textContent: "Загрузите файл"
     });
-    const changeAvatarLink = new Block("a", {
+    const changeAvatarLink = new Input({
       textContent: "Выбрать файл на компьютере",
+      type: "file",
+      name: "avatar",
       classes: ["popup-link"],
       listeners: {
         click: (e: Event) => {
-          e.preventDefault();
+          e.cancelBubble = true;
         }
       }
-    }, linkTemplate);
+    });
     const changeAvatarButton = new Input({
       value: "Изменить аватар",
+      type: "submit",
       classes: [
         "popup-button",
         "base-input-button",
         "sign-btn"
       ],
       listeners: {
-        click: () => {
+        click: (e: Event) => {
+          e.cancelBubble = true;
         }
       }
     });
-    const changeAvaparPopupContainer: Container = new Container({
+    const changeAvaparPopupContainer: Form = new Form({
       classes: [
         "main-block",
         "change-avatar-popup"
@@ -88,6 +94,15 @@ export class ProfilePage extends Block {
       listeners: {
         click: (e: Event) => {
           e.cancelBubble = true;
+        },
+        submit: (e: Event) => {
+          e.cancelBubble = true;
+          e.preventDefault();
+          let data = new FormData(e.target as HTMLFormElement);
+          const newAv = data.get("avatar");
+          if ((newAv as File).size) {
+            this.eventBus.emit(ProfilePageEvents.CHANGE_AVATAR, data);
+          }
         }
       },
       changeAvatarTitle,
@@ -98,6 +113,11 @@ export class ProfilePage extends Block {
     
     //region avatar
     const img: Block = new Block("img", {classes: ["avatar"]}, imgTemplate);
+    
+    const avatarSrc = get(state, "user.avatar");
+    if (avatarSrc) {
+      img.setProps({src: baseYaUrl + avatarSrc});
+    }
     const newAvatar: Container = new Container({
       classes: ["new-avatar"], textContent: "Изменить аватар",
       listeners: {
@@ -110,8 +130,8 @@ export class ProfilePage extends Block {
     const avatarWrapper: Container = new Container({classes: ["avatar-wrapper"], img, newAvatar},
       avatarWrapperTemplate);
     //endregion avatar
-    
-    const nameLabel: Container = new Container({classes: ["name-label"], textContent: "Иван"});
+    const displayName = get(state, "user.display_name");
+    const nameLabel: Container = new Container({classes: ["name-label"], textContent: displayName || "" });
     
     const {form, items: profileFormItems}: Record<string, any> = getProfileForm(false);
     
@@ -136,7 +156,6 @@ export class ProfilePage extends Block {
     
     this.profileFormItems = profileFormItems;
     this.contentWrapper = contentWrapper;
-    this.controller = new ProfilePageController();
     const actionsContainer = this.getActionContainer(this.getPreviewActionContainerItems());
     form.setProps({
       listeners: {
@@ -144,13 +163,13 @@ export class ProfilePage extends Block {
           const items: Record<string, string> = Array.prototype.reduce.call((e.target as HTMLFormElement).elements,
             (res: Record<string, string>, {name, value}: { name: string, value: string }) => {
               if (name && value) {
-                return res[name] = value;
+                res[name] = value;
               }
+              return res;
             }, {});
-          console.log(JSON.stringify(items));
           const isNotValid = form.validate();
           if (!isNotValid) {
-            this.controller.setState(ProfileStates.Preview);
+            this.eventBus.emit(ProfilePageEvents.CHANGE_DATA, items);
             const actionsContainer: Container = this.getActionContainer(this.getPreviewActionContainerItems());
             this.setInputsDisable(true);
             this.profileForm.setProps({actionsContainer});
@@ -161,6 +180,23 @@ export class ProfilePage extends Block {
     });
     this.profileForm = form;
     this.profileForm.setProps({actionsContainer});
+    this.avatarImg = img;
+    this.submit();
+  }
+  
+  submit() {
+    ApplicationStore.on(StoreEvents.Updated, (path: string, value: any) => this.onChangeUserData(path, value));
+  }
+  
+  onChangeUserData(path: string, value: any) {
+    if (path === "user" && value?.id) {
+      const {form, items: profileFormItems}: Record<string, any> = getProfileForm(false);
+      this.profileFormItems = profileFormItems;
+      this.profileForm = form;
+      this.contentWrapper.setProps({form: this.profileForm});
+      this.contentWrapper.props.nameLabel.setProps({textContent: value.display_name || ""});
+      this.avatarImg.setProps({src: baseYaUrl + value.avatar});
+    }
   }
   
   getActionContainer(actions: Record<string, Input>): Container {
@@ -196,7 +232,7 @@ export class ProfilePage extends Block {
       ],
       "button",
       () => {
-        render("body", new LoginPage());
+        this.eventBus.emit(ProfilePageEvents.LOGOUT);
       });
     return {
       changeDataButton,
@@ -222,14 +258,14 @@ export class ProfilePage extends Block {
   }
   
   onChangeDataClick(): void {
-    this.controller.setState(ProfileStates.ChangeInfo);
+    this.eventBus.emit(ProfilePageEvents.CHANGE_STATE, ProfileStates.ChangeInfo);
     this.setInputsDisable(false);
     const actionsContainer: Container = this.getActionContainer(this.getChangeDataActionsContainer());
     this.profileForm.setProps({actionsContainer});
   }
   
   onChangePassButtonClick(): void {
-    this.controller.setState(ProfileStates.ChangePass);
+    this.eventBus.emit(ProfilePageEvents.CHANGE_STATE, ProfileStates.ChangePass);
     if (!this.changePassForm) {
       const {form/*, items*/} = getChangePasswordForm();
       form.setProps({
@@ -239,13 +275,14 @@ export class ProfilePage extends Block {
             const items: Record<string, string> = Array.prototype.reduce.call((e.target as HTMLFormElement).elements,
               (res: Record<string, string>, {name, value}: { name: string, value: string }) => {
                 if (name && value) {
-                  return res[name] = value;
+                  res[name] = value;
                 }
+                return res;
               }, {});
-            console.log(JSON.stringify(items));
+            
             const isNotValid = form.validate();
             if (!isNotValid) {
-              this.controller.setState(ProfileStates.Preview);
+              this.eventBus.emit(ProfilePageEvents.CHANGE_PASSWORD, items);
               this.changePassForm.hide();
               this.profileForm.show();
             }
@@ -254,7 +291,6 @@ export class ProfilePage extends Block {
         }
       });
       this.changePassForm = form;
-      //this.changePassFormItems = items;
       this.contentWrapper.setProps({changePassForm: this.changePassForm});
     }
     this.profileForm.hide();
@@ -290,12 +326,13 @@ export class ProfilePage extends Block {
 }
 
 function getProfileForm(enabled: boolean): { form: Form, items: Record<string, ContaineredInput> } {
-  const email: ContaineredInput = getFormItem("email", "string", "Почта", enabled);
-  const login: ContaineredInput = getFormItem("login", "string", "Логин", enabled);
-  const firstName: ContaineredInput = getFormItem("first_name", "string", "Имя", enabled);
-  const secondName: ContaineredInput = getFormItem("second_name", "string", "Фамилия", enabled);
-  const displayName: ContaineredInput = getFormItem("display_name", "string", "Имя в чате", enabled);
-  const phone: ContaineredInput = getFormItem("phone", "string", "Телефон", enabled);
+  const {user} = ApplicationStore.getState();
+  const email: ContaineredInput = getFormItem("email", "string", "Почта", enabled, user!.email);
+  const login: ContaineredInput = getFormItem("login", "string", "Логин", enabled, user!.login);
+  const firstName: ContaineredInput = getFormItem("first_name", "string", "Имя", enabled, user!.first_name);
+  const secondName: ContaineredInput = getFormItem("second_name", "string", "Фамилия", enabled, user!.second_name);
+  const displayName: ContaineredInput = getFormItem("display_name", "string", "Имя в чате", enabled, user!.display_name);
+  const phone: ContaineredInput = getFormItem("phone", "string", "Телефон", enabled, user!.phone);
   const form: Form = new Form({
     classes: [
       "profile-form",
@@ -315,9 +352,9 @@ function getProfileForm(enabled: boolean): { form: Form, items: Record<string, C
 }
 
 function getChangePasswordForm(): { form: Form, items: Record<string, ContaineredInput> } {
-  const oldPass: ContaineredInput = getFormItem("email", "password", "Старый пароль", true);
-  const newPass: ContaineredInput = getFormItem("login", "password", "Новый пароль", true);
-  const newPassConfirmation: ContaineredInput = getFormItem("login", "password", "Повторите пароль", true);
+  const oldPass: ContaineredInput = getFormItem("oldPassword", "password", "Старый пароль", true);
+  const newPass: ContaineredInput = getFormItem("newPassword", "password", "Новый пароль", true);
+  const newPassConfirmation: ContaineredInput = getFormItem("newPasswordConf", "password", "Повторите пароль", true);
   const form: Form = new Form({
     classes: [
       "profile-form",

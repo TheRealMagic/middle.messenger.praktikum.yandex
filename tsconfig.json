@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "plugins": [{"name": "typescript-plugin-css-modules"}],
-    "module": "es6",
-    "target": "es6",
+    "target": "es5",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
     "strictNullChecks": true,
+    "esModuleInterop": true,
     "outDir": "tproj"
   },
   "include": [
