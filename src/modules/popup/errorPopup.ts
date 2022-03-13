@@ -1,6 +1,6 @@
 import {Label} from "../../components/label/label";
-import {Input} from "../../components/Input";
-import {Container} from "../../components/container";
+import {Input} from "../../components/Input/input";
+import {Container} from "../../components/container/container";
 import {Popup} from "./popup";
 import {errorContainerTemplate} from "./template";
 

@@ -5,8 +5,9 @@
   "engine": "14.15.1",
   "scripts": {
     "login": "parcel static/index.html --open",
-    "build": "parcel build",
-    "start": "parcel build && node server.js",
+    "buildPcl": "parcel build",
+    "startPcl": "parcel build && node server.js",
+    "start": "webpack && set PORT=3001 && node server.js",
     "test": "mocha"
   },
   "targets": {
@@ -28,15 +29,30 @@
     "@typescript-eslint/parser": "^5.10.1",
     "babel-plugin-transform-scss": "^1.1.0",
     "chai": "^4.3.6",
+    "css-loader": "^6.7.1",
     "eslint": "^8.7.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
+    "html-loader": "^3.1.0",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^7.0.4",
     "ignore-styles": "^5.0.1",
     "jsdom": "^19.0.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^9.2.1",
+    "node-sass": "^7.0.1",
     "parcel": "^2.2.1",
+    "sass-loader": "^12.6.0",
+    "style-loader": "^3.3.1",
     "stylelint": "^14.3.0",
+    "ts-loader": "^9.2.7",
     "ts-node": "^10.5.0",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test"
+    }
   }
 }
