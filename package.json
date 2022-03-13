@@ -53,7 +53,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run test && npm run lint"
+      "pre-commit": "console.log(\"123\") && npm run test && npm run lint"
     }
   }
 }
