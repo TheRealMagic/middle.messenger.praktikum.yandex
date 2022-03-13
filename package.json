@@ -8,7 +8,8 @@
     "buildPcl": "parcel build",
     "startPcl": "parcel build && node server.js",
     "start": "webpack && set PORT=3001 && node server.js",
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint src --ext .ts"
   },
   "targets": {
     "default": {
@@ -52,7 +53,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run test"
+      "pre-commit": "npm run test && npm run lint"
     }
   }
 }
