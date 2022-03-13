@@ -7,9 +7,10 @@
     "login": "parcel static/index.html --open",
     "buildPcl": "parcel build",
     "startPcl": "parcel build && node server.js",
-    "start": "webpack && set PORT=3001 && node server.js",
-    "test": "mocha",
-    "lint": "eslint src --ext .ts"
+    "start": "webpack && set PORT=3000 && node server.js",
+    "test": "mocha --timeout 5000",
+    "lint": "eslint src --ext .ts",
+    "prepare": "npx husky-init && husky install"
   },
   "targets": {
     "default": {
@@ -35,7 +36,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^7.0.4",
+    "husky": "^7.0.0",
     "ignore-styles": "^5.0.1",
     "jsdom": "^19.0.0",
     "jsdom-global": "^3.0.2",
