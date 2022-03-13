@@ -9,8 +9,7 @@
     "startPcl": "parcel build && node server.js",
     "start": "webpack && set PORT=3000 && node server.js",
     "test": "mocha --timeout 5000",
-    "lint": "eslint src --ext .ts",
-    "prepare": "npx husky-init && husky install"
+    "lint": "eslint src --ext .ts"
   },
   "targets": {
     "default": {
