@@ -1,6 +1,7 @@
 import {blockProperty, Meta} from "./types";
 import EventBus from "../../utils/EventBus";
 import {Templator} from "../../utils/Templator/Templator";
+
 import "./styles.scss";
 
 export class Block {

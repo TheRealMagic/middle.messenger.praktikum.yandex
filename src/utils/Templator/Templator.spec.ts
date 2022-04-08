@@ -1,6 +1,6 @@
 import {assert} from "chai";
 import {Templator} from "./Templator";
-import {Block} from "../../components/block";
+import {Block} from "../../components/block/block";
 
 
 describe("Templator tests", () => {
