@@ -9,6 +9,8 @@ import {Router} from "../../utils/RouteUtils/Router";
 import {LoginFormModel} from "./types";
 import ErrorPopup from "../../modules/popup/errorPopup";
 
+import "./styles.scss";
+
 export default class LoginPage extends Block {
   
   private form: Form;

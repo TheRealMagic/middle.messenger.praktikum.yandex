@@ -2,7 +2,7 @@ export const backButtonContainerTemplate = "<div {{ classes backButton }}></div>
 
 export const avatarWrapperTemplate = "<div {{ classes newAvatar img }}></div>";
 
-export const contentWrapperTemplate =  "<div {{ classes profileForm changePassForm nameLabel avatarWrapper }}></div>";;
+export const contentWrapperTemplate =  "<div {{ classes profileForm changePassForm nameLabel avatarWrapper }}></div>";
 
 export const profileContainerTemplate = "<div {{ classes contentWrapper }}></div>";
 
